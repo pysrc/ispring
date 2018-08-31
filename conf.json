@@ -1,0 +1,16 @@
+{
+	"repos":"pysrc/gitapi",
+	"index":{
+		"path":"mds/hello.md",
+	},
+	"files":[
+		{
+			"path": "mds/hello.md",
+			"tags":[
+				"hello",
+				"markdown",
+				"demo"
+			]
+		}
+	]
+}
