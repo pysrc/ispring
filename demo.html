@@ -18,18 +18,66 @@
 	<script>hljs.initHighlightingOnLoad();</script>
 </head>
 <body>
-	<div class="panel panel-primary">
-		<div class="panel-heading">
-			<h3 class="panel-title">
-				Hello
-			</h3>
-		</div>
-		<div class="panel-body">
-			<div id="markdown"></div>
+
+	<div class="jumbotron text-center" style="margin-bottom:0">
+	 	<h1>Welcome to gitapi</h1>
+	</div>
+
+
+	<div class="container">
+		<div class="row">
+
+			<div class="col-sm-8 column">
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							Hello
+						</h3>
+					</div>
+					<div class="panel-body">
+						<div id="markdown"></div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-sm-4 column">
+				<div class="input-group">
+					<input id="search" type="text" class="form-control" placeholder="Key word">
+					<span class="input-group-addon" onclick="go()">Go</span>
+				</div>
+				<h1></h1>
+				<div class="list-group">
+					<ul id="alist" class="nav nav-tabs nav-stacked">
+		                <li class="active"><a href="#">文章列表</a></li>
+<!-- 		                <li><a href="#">Tutorials</a></li>
+		                <li><a href="#">Practice Editor </a></li>
+		                <li><a href="#">Gallery</a></li>
+		                <li><a href="#">Contact</a></li> -->
+		            </ul>
+				</div>
+			</div>
 		</div>
 	</div>
+
+	<div class="jumbotron text-center" style="margin-bottom:0">
+	  <p>https://github.com/pysrc</p>
+	</div>
+
 	<script type="text/javascript">
-		$("#markdown").html(marked(getMarkdown("pysrc/gitapi", "mds/hello.md")));
+		// 解析配置文件
+		conf = eval('(' + getText('pysrc/gitapi','conf.json') + ')')
+		// $("#markdown").html(marked(getMarkdown("pysrc/gitapi", "mds/hello.md")));
+		show(conf.repos, conf.files[conf.files.length-1].path)
+		// $("#markdown").html(marked(getMarkdown(conf.repos, conf.files[conf.files.length-1].path)));
+		for (var i = conf.files.length - 1; i >= 0; i--) {
+			$("#alist").append('<li><a onclick="show("'+conf.repos+'","'+conf.files[i].path+'")">'+conf.files[i].path.replace(/.*\/(.*?).md/g,"$1")+'</a></li>')
+		}
+		function show(repos, filepath){
+			$("#markdown").html(marked(getMarkdown(repos, filepath)));
+		}
+		function go() {
+			alert($("#search").val())
+		}
 	</script>
 </body>
 </html>
