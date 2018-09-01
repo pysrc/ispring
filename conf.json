@@ -11,6 +11,13 @@
 				"markdown",
 				"demo"
 			]
+		},
+		{
+			"path": "mds/second.md",
+			"tags":[
+				"second",
+				"demo"
+			]
 		}
 	]
 }
