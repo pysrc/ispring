@@ -38,6 +38,10 @@
 						<div id="markdown"></div>
 					</div>
 				</div>
+				<ul class="pager">
+					<li><a href="#">上一页</a></li>
+					<li><a href="#">下一页</a></li>
+				</ul>
 			</div>
 
 			<div class="col-sm-4 column">
@@ -49,10 +53,6 @@
 				<div class="list-group">
 					<ul id="alist" class="nav nav-tabs nav-stacked">
 		                <li class="active"><a href="#">文章列表</a></li>
-<!-- 		                <li><a href="#">Tutorials</a></li>
-		                <li><a href="#">Practice Editor </a></li>
-		                <li><a href="#">Gallery</a></li>
-		                <li><a href="#">Contact</a></li> -->
 		            </ul>
 				</div>
 			</div>
@@ -69,14 +69,28 @@
 		// $("#markdown").html(marked(getMarkdown("pysrc/gitapi", "mds/hello.md")));
 		show(conf.repos, conf.files[conf.files.length-1].path)
 		// $("#markdown").html(marked(getMarkdown(conf.repos, conf.files[conf.files.length-1].path)));
-		for (var i = conf.files.length - 1; i >= 0; i--) {
-			$("#alist").append('<li><a onclick="show("'+conf.repos+'","'+conf.files[i].path+'")">'+conf.files[i].path.replace(/.*\/(.*?).md/g,"$1")+'</a></li>')
-		}
-		function show(repos, filepath){
+		showList(conf.files, conf.mostCount)
+		function show(repos, filepath){ // 显示文章
 			$("#markdown").html(marked(getMarkdown(repos, filepath)));
 		}
+		function showList(arr, num){ // 显示文章列表
+			$('li[name="item"]').remove()
+			stop = arr.length-num
+			if(stop<0)
+				return
+			for (var i = arr.length - 1; i >= stop; i--) {
+				$("#alist").append('<li name="item"><a href="#" onclick="show(\''+conf.repos+'\',\''+arr[i].path+'\')">'+arr[i].path.replace(/.*\/(.*?).md/g,"$1")+'</a></li>')
+			}
+		}
 		function go() {
-			alert($("#search").val())
+			key = $("#search").val().toUpperCase()
+			arr = new Array()
+			for (var i = conf.files.length - 1; i >= 0; i--) {
+				if(conf.files[i].path.toUpperCase().indexOf(key)!=-1 || conf.files[i].tags.join('|').toUpperCase().indexOf(key)!=-1){
+					arr.push(conf.files[i])
+				}
+			}
+			showList(arr, arr.length)
 		}
 	</script>
 </body>
