@@ -46,7 +46,7 @@
 						</h3>
 					</div>
 					<div class="panel-body">
-						<div id="markdown" onclick="resizeImg()"></div>
+						<div id="markdown"></div>
 					</div>
 				</div>
 				<ul class="pager">
@@ -91,22 +91,13 @@
     	});
 
 		function show(filepath){ // 显示文章
+			maxw = $("#markdown").width()
 			$("#ititle").html(filepath.replace(/.*\/(.*?).md/g,"$1"))
 			$("#markdown").html(marked(getMarkdown(filepath)))
 			$('pre').each(function(i, block) { // 将代码块背景美化一下
                 hljs.highlightBlock(block);
             });
-            resizeImg()
-		}
-		
-		function resizeImg(){
-			$('img').each(function() { // 改变图片大小适应div
-				maxw = $("#markdown").width()
-				if($(this).width()>maxw){
-					$(this).css("hight", $(this).height()*($(this).width()/maxw))
-					$(this).css("width", maxw)
-				}
-			})
+            $('img').attr('style',"max-width:"+maxw+"px") // 防止图片跑出div
 		}
 
 		function showPage(page){ // 根据页数显示文章
