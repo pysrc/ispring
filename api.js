@@ -1,17 +1,9 @@
-function getReposUrl(repos, path) {
-    /**
-    @repos GitHub用户名/仓库名 eg. pysrc/fractal
-    @path 仓库中的文件或文件夹路径
-    */
-    return "https://api.github.com/repos/"+repos+"/contents/"+path;
-}
-
 // 获取文本文件内容
-function getText(repos, filepath){
+function getText(filepath){
     var txt = ""
     $.ajax({
         type:"GET",
-        url:getReposUrl(repos, filepath),
+        url:filepath,
         dataType : "json",
         async: false,
         success : function(msg) {
@@ -24,14 +16,13 @@ function getText(repos, filepath){
 /**
     通过仓库名与文件路径名返回markdown地址
 */
-function getMarkdown(repos, filepath){
-    var txt = getText(repos, filepath);
+function getMarkdown(filepath){
+    var txt = getText(filepath);
     ir = filepath.split("/")
     ir.pop()
     // 找到图片地址的前缀
-    var imgsrc = ir.join("/")
     // 将markdown中的图片地址替换为真实的图片网址
-    txt = txt.replace(/\!\[\]\((.*?)\)/g,"![]("+imgsrc+"/$1)")
+    txt = txt.replace(/\!\[\]\((.*?)\)/g,"![]("+ir.join("/")+"/$1)")
     return txt;
 }
 

@@ -81,7 +81,7 @@
 	<script type="text/javascript">
 
 		// 解析配置文件
-		conf = eval('(' + getText('pysrc/gitapi','conf.json') + ')')
+		conf = eval('(' + getText('conf.json') + ')')
 		var curPage = 1; // 当前页数
 		// 显示首页文章
 		showPage(1)
@@ -92,9 +92,9 @@
         	 	go()
     	});
 
-		function show(repos, filepath){ // 显示文章
+		function show(filepath){ // 显示文章
 			$("#ititle").html(filepath.replace(/.*\/(.*?).md/g,"$1"))
-			$("#markdown").html(marked(getMarkdown(repos, filepath)))
+			$("#markdown").html(marked(getMarkdown(filepath)))
 			$('pre').each(function(i, block) { // 将代码块背景美化一下
                 hljs.highlightBlock(block);
             });
@@ -123,7 +123,7 @@
 				curPage = page
 				$("#next_btn").hide()
 			}
-			show(conf.repos, conf.files[conf.files.length-page].path)
+			show(conf.files[conf.files.length-page].path)
 			$("#pageLabel").html("第"+curPage+"页，共"+conf.files.length+"页")
 		}
 		function nextPage(){ // 下一页
@@ -148,7 +148,7 @@
 			if(stop<0)
 				stop = 0
 			for (var i = arr.length - 1; i >= stop; i--) {
-				$("#alist").append('<li name="item"><a href="#" onclick="show(\''+conf.repos+'\',\''+arr[i].path+'\')">'+arr[i].path.replace(/.*\/(.*?).md/g,"$1")+'</a></li>')
+				$("#alist").append('<li name="item"><a href="#" onclick="show(\''+arr[i].path+'\')">'+arr[i].path.replace(/.*\/(.*?).md/g,"$1")+'</a></li>')
 			}
 		}
 		
