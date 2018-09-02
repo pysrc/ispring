@@ -4,7 +4,7 @@ function getText(filepath){
     $.ajax({
         type:"GET",
         url:filepath,
-        dataType:"text"
+        dataType:"text",
         async: false,
         success : function(msg) {
             txt = msg
