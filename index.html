@@ -81,7 +81,8 @@
 	<script type="text/javascript">
 
 		// 解析配置文件
-		conf = eval('(' + getText('conf.json') + ')')
+		// conf = eval('(' + getText('conf.json') + ')')
+		conf = getText('conf.json')
 		var curPage = 1; // 当前页数
 		// 显示首页文章
 		showPage(1)
