@@ -29,7 +29,7 @@ function getMarkdown(repos, filepath){
     ir = filepath.split("/")
     ir.pop()
     // 找到图片地址的前缀
-    var imgsrc = "https://raw.githubusercontent.com/"+repos+"/master/"+ir.join("/")
+    var imgsrc = ir.join("/")
     // 将markdown中的图片地址替换为真实的图片网址
     txt = txt.replace(/\!\[\]\((.*?)\)/g,"![]("+imgsrc+"/$1)")
     return txt;
