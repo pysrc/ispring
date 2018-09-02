@@ -3,12 +3,14 @@
 <head>
 	<title>Coding I'm serious</title>
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-	<link rel="stylesheet" href="local_static/bootstrap.min.css">
-	<script src="local_static/jquery.min.js"></script>
-	<script src="local_static/bootstrap.min.js"></script>
-	<script src="local_static/marked.js"></script>
-	<link href="local_static/agate.min.css" rel="stylesheet">
-	<script src="local_static/highlight.min.js"></script>
+	<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+	<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="api.js"></script>
+	<script src="conf.js"></script>
+	<script src="https://cdn.bootcss.com/marked/0.4.0/marked.js"></script>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/agate.min.css" rel="stylesheet">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
 	<script>hljs.initHighlightingOnLoad();</script>
 	<script type="text/javascript">
 		marked.setOptions({
@@ -78,19 +80,6 @@
 	</div>
 
 	<script type="text/javascript">
-		function getText(url){
-			text = ""
-			$.ajax({
-				url: url,
-				async: false,
-				success:function(result){
-					text = result
-	    		}
-			});
-			return text;
-		}
-		// 解析配置文件
-		var conf = eval("("+getText("conf.json")+")")
 		var curPage = 1; // 当前页数
 		// 显示首页文章
 		showPage(1)
@@ -103,12 +92,7 @@
 
 		function show(filepath){ // 显示文章
 			$("#ititle").html(filepath.replace(/.*\/(.*?).md/g,"$1"))
-			ir = filepath.split("/")
-		    ir.pop()
-		    // 找到图片地址的前缀
-		    var imgsrc = ir.join("/")
-		    // 将markdown中的图片地址替换为真实的图片网址
-			$("#markdown").html(marked(getText(filepath).replace(/\!\[\]\((.*?)\)/g,"![]("+imgsrc+"/$1)")))
+			$("#markdown").html(marked(getMarkdown(filepath)))
 			$('pre').each(function(i, block) { // 将代码块背景美化一下
                 hljs.highlightBlock(block);
             });

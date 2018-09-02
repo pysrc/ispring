@@ -35,9 +35,8 @@ Clone the project to locally
 
 Go to the project folder, delete the .git folder, CNAME file, and modify the conf.json file.
 
-```json
-{
-	"repos":"pysrc/gitapi", // The name of the repository where the resource is stored
+```js
+conf = {
 	"mostCount": 5, // The sidebar displays the number of bars, and the search is not subject to this restriction.
 	"files":[ // List of files in the warehouse
 		{
