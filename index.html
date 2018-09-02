@@ -38,12 +38,10 @@
 <body>
 	<div class="container">
 		<div class="row top-buffer">
-			<div class="col-sm-8 column">
+			<div id="main-view" class="col-sm-9 column">
 				<div class="panel panel-primary">
 					<div class="panel-heading">
-						<h3 class="panel-title">
-							<div id="ititle"></div>
-						</h3>
+						<h3 id="ititle" class="panel-title" onclick="scala()"></h3>
 					</div>
 					<div class="panel-body">
 						<div id="markdown"></div>
@@ -58,7 +56,7 @@
 				</ul>
 			</div>
 
-			<div class="col-sm-4 column">
+			<div id="right-view" class="col-sm-3 column">
 				<div class="input-group">
 					<input id="search" type="text" class="form-control" placeholder="请输入关键词">
 			      	<span class="input-group-btn" onclick="go()">
@@ -78,7 +76,6 @@
 	<div class="jumbotron text-center" style="margin-bottom:0">
 	  <p>https://github.com/pysrc</p>
 	</div>
-
 	<script type="text/javascript">
 		var curPage = 1; // 当前页数
 		// 显示首页文章
@@ -89,15 +86,18 @@
         	if(event.keyCode == 13)
         	 	go()
     	});
-
+    	function refrashImg(){ // 刷新页面图片大小
+    		maxw = $("#markdown").width()
+    		$('img').attr('style',"max-width:"+maxw+"px") // 防止图片跑出div
+    	}
 		function show(filepath){ // 显示文章
-			maxw = $("#markdown").width()
+			
 			$("#ititle").html(filepath.replace(/.*\/(.*?).md/g,"$1"))
 			$("#markdown").html(marked(getMarkdown(filepath)))
 			$('pre').each(function(i, block) { // 将代码块背景美化一下
                 hljs.highlightBlock(block);
             });
-            $('img').attr('style',"max-width:"+maxw+"px") // 防止图片跑出div
+            refrashImg()
 		}
 
 		function showPage(page){ // 根据页数显示文章
@@ -140,7 +140,17 @@
 				$("#alist").append('<li name="item"><a href="#" onclick="show(\''+arr[i].path+'\')">'+arr[i].path.replace(/.*\/(.*?).md/g,"$1")+'</a></li>')
 			}
 		}
-		
+		// 点击标题切换视图大小
+		function scala(){
+			if($('#main-view').attr("class")=="col-sm-12 column"){
+				$('#main-view').attr("class","col-sm-9 column")
+				$('#right-view').show()
+			}else{
+				$('#main-view').attr("class","col-sm-12 column")
+				$('#right-view').hide()
+			}
+			refrashImg()
+		}
 		function go() { // 文章查找
 			key = $("#search").val().toUpperCase()
 			arr = new Array()
