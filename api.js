@@ -4,7 +4,6 @@ function getText(filepath){
     $.ajax({
         type:"GET",
         url:filepath,
-        dataType : "json",
         async: false,
         success : function(msg) {
             var b64 = new Base64();
