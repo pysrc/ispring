@@ -38,7 +38,7 @@ Clone the project to locally
 
 ### Step 2
 
-Go to the project folder, delete the .git folder, CNAME file, and modify the conf.json file.
+Go to the project folder, delete the .git folder, and modify the conf.js file.
 
 ```js
 conf = {
@@ -68,4 +68,4 @@ Then initialize it to your own project and upload Github, then mark the project 
 
 ## Local display
 
-Local presentations require Python 3.x to be installed. After running preview.py, you can access it by visiting `http://127.0.0.1/local.html`.
+Local presentations require Python 3.x to be installed. After running preview.py, you can access it by visiting `http://127.0.0.1/`.

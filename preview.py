@@ -7,7 +7,7 @@ Handler = http.server.SimpleHTTPRequestHandler
 
 
 httpd = socketserver.TCPServer(("127.0.0.1", PORT), Handler)
-print("http://127.0.0.1/local.html")
+print("http://127.0.0.1/")
 try:
     httpd.serve_forever()
 except Exception as e:
