@@ -77,11 +77,15 @@
 	  <p>https://github.com/pysrc</p>
 	</div>
 	<script type="text/javascript">
-		var curPage = 1; // 当前页数
+		var curPage = 0; // 当前页数
 		// 显示首页文章
-		showPage(1)
+		showPage(curPage)
 		// 显示右侧栏目
-		showList(conf.files, conf.mostCount)
+		var fs = new Array()
+		for(i = 0; i < conf.files.length; i++){
+			fs.push(i)
+		}
+		showList(fs, conf.mostCount)
 		$('#search').keydown(function(event){ // 输入框回车搜索
         	if(event.keyCode == 13)
         	 	go()
@@ -103,41 +107,34 @@
 		function showPage(page){ // 根据页数显示文章
 			$("#prev_btn").show()
 			$("#next_btn").show()
-			if(page<=1){
-				page = 1
-				curPage = 1
+			if(page<=0){
+				page = 0
 				$("#prev_btn").hide()
-			}else if(page>=conf.files.length){
-				page = conf.files.length
-				curPage = page
+			}else if(page>=conf.files.length-1){
+				page = conf.files.length-1
 				$("#next_btn").hide()
 			}
-			show(conf.files[conf.files.length-page].path)
-			$("#pageLabel").html("第"+curPage+"页，共"+conf.files.length+"页")
+			curPage = page
+			show(conf.files[curPage].path)
+			$("#pageLabel").html("第"+(curPage+1)+"页，共"+conf.files.length+"页")
 		}
 		function nextPage(){ // 下一页
-			curPage++
-			showPage(curPage)
+			showPage(curPage+1)
 		}
 		function prevPage(){
-			curPage--
-			showPage(curPage)
+			showPage(curPage-1)
 		}
 		function firstPage(){
-			curPage = 1
-			showPage(curPage)
+			showPage(0)
 		}
 		function lastPage(){
-			curPage = conf.files.length
-			showPage(curPage)
+			showPage(conf.files.length-1)
 		}
 		function showList(arr, num){ // 显示文章列表
 			$('li[name="item"]').remove()
-			stop = arr.length-num
-			if(stop<0)
-				stop = 0
-			for (var i = arr.length - 1; i >= stop; i--) {
-				$("#alist").append('<li name="item"><a href="#" onclick="show(\''+arr[i].path+'\')">'+arr[i].path.replace(/.*\/(.*?).md/g,"$1")+'</a></li>')
+			maxi = num < arr.length ? num : arr.length
+			for (var i = 0; i < maxi; i++) {
+				$("#alist").append('<li name="item"><a href="#" onclick="showPage('+arr[i]+')">'+conf.files[arr[i]].path.replace(/.*\/(.*?).md/g,"$1")+'</a></li>')
 			}
 		}
 		// 点击标题切换视图大小
@@ -154,9 +151,9 @@
 		function go() { // 文章查找
 			key = $("#search").val().toUpperCase()
 			arr = new Array()
-			for (var i = 0; i<=conf.files.length - 1; i++) {
+			for (var i = 0; i < conf.files.length; i++) {
 				if(conf.files[i].path.toUpperCase().indexOf(key)!=-1 || conf.files[i].tags.join('|').toUpperCase().indexOf(key)!=-1){
-					arr.push(conf.files[i])
+					arr.push(i)
 				}
 			}
 			showList(arr, arr.length)
