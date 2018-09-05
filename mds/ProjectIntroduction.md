@@ -10,7 +10,7 @@ At present, the project supports code syntax highlighting, image, gif, keyword s
 
 Below is a picture.
 
-![](mds/ProjectIntroduction/hello.png)
+![](ProjectIntroduction/hello.png)
 
 Here is a Python code
 
