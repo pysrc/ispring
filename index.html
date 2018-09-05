@@ -3,12 +3,12 @@
 <head>
 	<title>Coding I'm serious</title>
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-	<link rel="stylesheet" href="lib/bootstrap.min.css">
-	<script src="lib/jquery.min.js"></script>
-	<script src="lib/bootstrap.min.js"></script>
-	<script src="lib/marked.js"></script>
-	<link href="lib/agate.min.css" rel="stylesheet">
-	<script src="lib/highlight.min.js"></script>
+	<link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="https://cdn.bootcss.com/marked/0.4.0/marked.js"></script>
+	<link href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/agate.min.css" rel="stylesheet">
+	<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
 	<script src="lib/api.js"></script>
 	<script src="conf.js"></script>
 	<script>hljs.initHighlightingOnLoad();</script>
@@ -22,13 +22,9 @@
 	</script>
 	<style type="text/css">
 		 body{
-
-		   background:url(header.jpg)  no-repeat center center;
-
+		   background:url(lib/back.jpg)  no-repeat center center;
 		   background-size:cover;
-
 		   background-attachment:fixed;
-
 		}
 		.top-buffer{
 			margin-top:200px;
@@ -36,22 +32,55 @@
 	</style>
 </head>
 <body>
+	<div class="list-group top-buffer" style="position:fixed;margin-left: 10px">
+		<ul class="nav nav-stacked">
+	        <li><a href="msg.html">留言</a></li>
+	        <li><a href="#" data-toggle="modal" data-target="#priModal">私信</a></li>
+	        <li><a href="primsg.html">查收</a></li>
+	        <li><a href="#" id="scalaBtn" onclick="scala()">大屏</a></li>
+	    </ul>
+	</div>
 	<div class="container">
-		<div class="row top-buffer">
+		<div id="main" class="row top-buffer">
 			<div id="main-view" class="col-sm-9 column">
 				<div class="panel panel-primary">
 					<div class="panel-heading">
-						<h3 id="ititle" class="panel-title" onclick="scala()"></h3>
+						<h3 id="ititle" class="panel-title"></h3>
 					</div>
 					<div class="panel-body">
 						<div id="markdown"></div>
+						<button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#art-panel" style="float: right;">评论</button>
+					</div>
+				</div>
+				<div id="art-panel" class="collapse out">
+					<div class="panel panel-primary">
+					    <div class="panel-heading">
+					        <h3 class="panel-title">评论区</h3>
+					    </div>
+					    <div class="panel-body">
+					        <form role="form">
+					            <div class="form-group">
+					                <textarea name="content" id="art-comment" class="form-control" rows="3"  style="resize:none"></textarea>
+					            </div>
+					            <button type="button" class="btn btn-primary" style="float: right;" data-toggle="modal" data-target="#myModal">提交</button>
+					        </form>
+					    </div>
+					</div>
+					<div class="panel panel-primary">
+						    <div class="panel-heading">
+						        <h3 class="panel-title">评论列表</h3>
+						    </div>
+					    <div class="panel-body">
+							<div id="art-comments"></div>
+							<button type="button" id="comsmorebtn" onclick="comsmore()" class="btn btn-default btn-lg btn-block">加载更多...</button>
+					    </div>
 					</div>
 				</div>
 				<ul class="pager">
-					<li><a id="first_btn" href="#" onclick="firstPage()">首页</a></li>
-					<li><a id="prev_btn" href="#" onclick="prevPage()">上一页</a></li>
-					<li><a id="next_btn" href="#" onclick="nextPage()">下一页</a></li>
-					<li><a id="last_btn" href="#" onclick="lastPage()">末页</a></li>
+					<li><a id="first_btn" href="#" onclick="showPage(0)">首页</a></li>
+					<li><a id="prev_btn" href="#" onclick="showPage(curPage-1)">上一页</a></li>
+					<li><a id="next_btn" href="#" onclick="showPage(curPage+1)">下一页</a></li>
+					<li><a id="last_btn" href="#" onclick="showPage(marks.length-1)">末页</a></li>
 					<li><label id="pageLabel"></label></li>
 				</ul>
 			</div>
@@ -73,6 +102,63 @@
 		</div>
 	</div>
 
+	<!-- 提交模态框（Modal） -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+						&times;
+					</button>
+					<h4 class="modal-title" id="myModalLabel">
+						登陆Github
+					</h4>
+				</div>
+				<div class="modal-body">
+					<div class="form-group">
+						<label for="name">用户名</label>
+						<input type="text" class="form-control" id="gituser" placeholder="username">
+					</div>
+					<div class="form-group">
+						<label for="name">密码</label>
+						<input type="password" class="form-control" id="gitpwd" placeholder="password">
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-primary" onclick="subelse()">游客提交</button>
+					<button type="button" class="btn btn-primary" onclick="subuser()">Github用户提交</button>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal -->
+	</div>
+	<!-- 私密模态框 -->
+	<div class="modal fade" id="priModal" tabindex="-1" role="dialog" aria-labelledby="priModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+						&times;
+					</button>
+					<h4 class="modal-title" id="priModalLabel">
+						私密信息
+					</h4>
+				</div>
+				<div class="modal-body">
+					<div class="form-group">
+						<textarea id="priMsg" class="form-control" rows="3"  style="resize:none" placeholder="在这里提交的信息将经过RSA加密，只有博主能够看到，请放心提交，如有必要请注明联系方式，谢谢！"></textarea>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭
+					</button>
+					<button type="button" class="btn btn-primary" onclick="subPriMsg()">
+						提交
+					</button>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal -->
+	</div>
 	<div class="jumbotron text-center" style="margin-bottom:0">
 	  <p>https://github.com/pysrc</p>
 	</div>
@@ -82,10 +168,10 @@
 		showPage(curPage)
 		// 显示右侧栏目
 		var fs = new Array()
-		for(i = 0; i < conf.files.length; i++){
+		for(i = 0; i < marks.length; i++){
 			fs.push(i)
 		}
-		showList(fs, conf.mostCount)
+		showList(fs, rightCount)
 		$('#search').keydown(function(event){ // 输入框回车搜索
         	if(event.keyCode == 13)
         	 	go()
@@ -107,34 +193,24 @@
 		function showPage(page){ // 根据页数显示文章
 			$("#prev_btn").show()
 			$("#next_btn").show()
+			// 收起回复框
+			$('#art-panel').collapse('hide')
 			if(page<=0){
 				page = 0
 				$("#prev_btn").hide()
-			}else if(page>=conf.files.length-1){
-				page = conf.files.length-1
+			}else if(page>=marks.length-1){
+				page = marks.length-1
 				$("#next_btn").hide()
 			}
 			curPage = page
-			show(conf.files[curPage].path)
-			$("#pageLabel").html("第"+(curPage+1)+"页，共"+conf.files.length+"页")
-		}
-		function nextPage(){ // 下一页
-			showPage(curPage+1)
-		}
-		function prevPage(){
-			showPage(curPage-1)
-		}
-		function firstPage(){
-			showPage(0)
-		}
-		function lastPage(){
-			showPage(conf.files.length-1)
+			show(marks[curPage].path)
+			$("#pageLabel").html("第"+(curPage+1)+"页，共"+marks.length+"页")
 		}
 		function showList(arr, num){ // 显示文章列表
 			$('li[name="item"]').remove()
 			maxi = num < arr.length ? num : arr.length
 			for (var i = 0; i < maxi; i++) {
-				$("#alist").append('<li name="item"><a href="#" onclick="showPage('+arr[i]+')">'+conf.files[arr[i]].path.replace(/.*\/(.*?).md/g,"$1")+'</a></li>')
+				$("#alist").append('<li name="item"><a href="#" onclick="showPage('+arr[i]+')">'+marks[arr[i]].path.replace(/.*\/(.*?).md/g,"$1")+'</a></li>')
 			}
 		}
 		// 点击标题切换视图大小
@@ -142,21 +218,136 @@
 			if($('#main-view').attr("class")=="col-sm-12 column"){
 				$('#main-view').attr("class","col-sm-9 column")
 				$('#right-view').show()
+				$('#scalaBtn').html("大屏")
 			}else{
 				$('#main-view').attr("class","col-sm-12 column")
 				$('#right-view').hide()
+				$('#scalaBtn').html("小屏")
 			}
 			refrashImg()
 		}
 		function go() { // 文章查找
 			key = $("#search").val().toUpperCase()
 			arr = new Array()
-			for (var i = 0; i < conf.files.length; i++) {
-				if(conf.files[i].path.toUpperCase().indexOf(key)!=-1 || conf.files[i].tags.join('|').toUpperCase().indexOf(key)!=-1){
+			for (var i = 0; i < marks.length; i++) {
+				if(marks[i].path.toUpperCase().indexOf(key)!=-1 || marks[i].tags.join('|').toUpperCase().indexOf(key)!=-1){
 					arr.push(i)
 				}
 			}
 			showList(arr, arr.length)
+		}
+	</script>
+	<!-- 评论处理 -->
+	<script src="confplus.js"></script>
+	<script src="lib/apiplus.js"></script>
+	<script type="text/javascript">
+		//本地issues缓存
+		var issues=new Array()
+		// 面板上添加新内容
+		function newComs(comment,dom){
+			if(comment==null){
+				return
+			}
+			var avatar_url = comment.user.avatar_url; // avatar_url
+			var muser = comment.user.login;
+			if(muser==user){
+				muser="Anyone"
+			}
+			var user_link = comment.user.html_url;
+			var updated_at = new Date(comment.updated_at).toLocaleString();
+			var body = comment.body;
+			var commentHtml = '<div class="media"><a class="media-left" href="'+user_link+'"><img width="50" height="50" class="media-object" src="'+avatar_url+'" alt="媒体对象"></a><div class="media-body"><h4 class="media-heading"><a href="'+user_link+'">'+muser+'</a></h4><small>'+updated_at+'</small><h6></h6>'+body+'</div></div><h2></h2>';
+			var new_obj = $(commentHtml);
+			dom.append(new_obj);
+		}
+		// 评论初始化
+		var curComPage=0 // 当前页的评论页数
+		// 点击评论按钮，弹出评论框时
+		$('#art-panel').on('show.bs.collapse', function () { // 打开评论按钮时触发（关闭时不进入此函数）
+			curComPage=0
+			// 清空评论列表
+			$('#art-comments').empty()
+			// 显示更多按钮
+			$("#comsmorebtn").show()
+		    ctitle=marks[curPage].path.replace(/.*\/(.*?).md/g,"$1")
+		    // 1.先从本地缓存查找
+		    curis=getIssueFromList(issues,ctitle)
+		    // 2.本地为空就从远端查找
+		    if(!curis){
+		    	curis=getIssue(repo,ctitle)
+		    }
+		    if(curis){ // 存在该issue
+		    	curComPage=1
+				msgs = getComments(curis.comments_url,curComPage,pageSizeCom)
+				for(i=0;i<msgs.length;i++){
+					newComs(msgs[i],$('#art-comments'))
+				}
+				issues.push(curis)
+				if(msgs.length!=pageSizeCom){
+					$("#comsmorebtn").hide()
+				}
+		    }else{//既然不存在，就不让他按按钮
+		    	$("#comsmorebtn").hide()
+		    }
+		})
+		function comsmore(){ //显示更多评论内容时
+	    	curComPage++
+			msgs = getComments(getIssueFromList(issues,marks[curPage].path.replace(/.*\/(.*?).md/g,"$1")).comments_url,curComPage,pageSizeCom)
+			for(i=0;i<msgs.length;i++){
+				newComs(msgs[i],$('#art-comments'))
+			}
+			if(msgs.length!=pageSizeCom){
+				$("#comsmorebtn").hide()
+			}
+		}
+		// 向后台写数据
+		function writeDate(u,p){
+			arttitle=marks[curPage].path.replace(/.*\/(.*?).md/g,"$1")
+			if(cheakmsg()){
+				// 不存在评论issue则新建
+				if(!getIssueFromList(issues,arttitle)){
+					issues.push(newIssue(user,pwd,repo,arttitle))
+				}
+				newComs(newComment(u,p,getIssueFromList(issues,arttitle).comments_url,$('#art-comment').val()),$('#art-comments'))
+				$('#art-comment').val('')
+				$('#myModal').modal('hide')
+			}
+		}
+		// 向后台写入数据(游客提交模式)
+		function subelse(){
+			writeDate(user,pwd)
+		}
+		// 向后台写入数据(github用户提交模式)
+		function subuser(){
+			writeDate($('#gituser').val(),$('#gitpwd').val())
+		}
+		function cheakmsg(){
+			if($('#art-comment').val()==""){
+				alert("请输入评论内容!")
+				return false
+			}
+			return true
+		}
+	</script>
+	<!-- rsa加密 -->
+	<script src="lib/jsencrypt.min.js"></script>
+	<script type="text/javascript">
+		function subPriMsg(){
+			if($('#priMsg').val()=='')
+				return
+			// 1.查看用于存放加密信息的issue是否存在
+			rsaIssue=getIssue(repo,priMsgTitle)
+			if(!rsaIssue){ // 还没有初始化RSAissue
+				rsaIssue=newIssue(user,pwd,repo,priMsgTitle)
+			}
+			// 3.信息经过Rsa公钥加密
+			var encrypt = new JSEncrypt();
+			encrypt.setPublicKey(getText(rsapub));
+			var encrypted = encrypt.encrypt($('#priMsg').val());
+			// 4.上传到issue
+			newComment(user,pwd,rsaIssue.comments_url,encrypted)
+			$('#priMsg').val("")
+			$('#priModal').modal('hide')
 		}
 	</script>
 </body>

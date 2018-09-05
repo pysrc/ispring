@@ -1,0 +1,124 @@
+/*
+{//return
+  "total_count": 1,
+  "incomplete_results": false,
+  "items": [
+    {
+      "url": "https://api.github.com/repos/pysrc/MarkdownRepos/issues/1",
+      "repository_url": "https://api.github.com/repos/pysrc/MarkdownRepos",
+      "labels_url": "https://api.github.com/repos/pysrc/MarkdownRepos/issues/1/labels{/name}",
+      "comments_url": "https://api.github.com/repos/pysrc/MarkdownRepos/issues/1/comments",
+      "events_url": "https://api.github.com/repos/pysrc/MarkdownRepos/issues/1/events",
+      "html_url": "https://github.com/pysrc/MarkdownRepos/issues/1",
+      "id": 356622751,
+      "node_id": "MDU6SXNzdWUzNTY2MjI3NTE=",
+      "number": 1,
+      "title": "msgtitle",
+      "user": {
+        "login": "land123",
+        "id": 42937596,
+        "node_id": "MDQ6VXNlcjQyOTM3NTk2",
+        "avatar_url": "https://avatars3.githubusercontent.com/u/42937596?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/land123",
+        "html_url": "https://github.com/land123",
+        "followers_url": "https://api.github.com/users/land123/followers",
+        "following_url": "https://api.github.com/users/land123/following{/other_user}",
+        "gists_url": "https://api.github.com/users/land123/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/land123/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/land123/subscriptions",
+        "organizations_url": "https://api.github.com/users/land123/orgs",
+        "repos_url": "https://api.github.com/users/land123/repos",
+        "events_url": "https://api.github.com/users/land123/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/land123/received_events",
+        "type": "User",
+        "site_admin": false
+      },
+      "labels": [],
+      "state": "open",
+      "locked": false,
+      "assignee": null,
+      "assignees": [],
+      "milestone": null,
+      "comments": 1,
+      "created_at": "2018-09-04T01:19:06Z",
+      "updated_at": "2018-09-04T11:51:28Z",
+      "closed_at": null,
+      "author_association": "NONE",
+      "body": null,
+      "score": 128.04704
+    }
+  ]
+}
+*/
+function getIssue(repo,title)
+
+
+/*
+[
+  {
+    "url": "https://api.github.com/repos/pysrc/ChenL/issues/comments/331634912",
+    "html_url": "https://github.com/pysrc/ChenL/issues/11#issuecomment-331634912",
+    "issue_url": "https://api.github.com/repos/pysrc/ChenL/issues/11",
+    "id": 331634912,
+    "node_id": "MDEyOklzc3VlQ29tbWVudDMzMTYzNDkxMg==",
+    "user": {
+      "login": "pysrc",
+      "id": 19337629,
+      "node_id": "MDQ6VXNlcjE5MzM3NjI5",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/19337629?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/pysrc",
+      "html_url": "https://github.com/pysrc",
+      "followers_url": "https://api.github.com/users/pysrc/followers",
+      "following_url": "https://api.github.com/users/pysrc/following{/other_user}",
+      "gists_url": "https://api.github.com/users/pysrc/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/pysrc/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/pysrc/subscriptions",
+      "organizations_url": "https://api.github.com/users/pysrc/orgs",
+      "repos_url": "https://api.github.com/users/pysrc/repos",
+      "events_url": "https://api.github.com/users/pysrc/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/pysrc/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "created_at": "2017-09-23T13:16:27Z",
+    "updated_at": "2017-09-23T13:16:27Z",
+    "author_association": "OWNER",
+    "body": "测试评论！"
+  },
+  {
+    "url": "https://api.github.com/repos/pysrc/ChenL/issues/comments/331634947",
+    "html_url": "https://github.com/pysrc/ChenL/issues/11#issuecomment-331634947",
+    "issue_url": "https://api.github.com/repos/pysrc/ChenL/issues/11",
+    "id": 331634947,
+    "node_id": "MDEyOklzc3VlQ29tbWVudDMzMTYzNDk0Nw==",
+    "user": {
+      "login": "pysrc",
+      "id": 19337629,
+      "node_id": "MDQ6VXNlcjE5MzM3NjI5",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/19337629?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/pysrc",
+      "html_url": "https://github.com/pysrc",
+      "followers_url": "https://api.github.com/users/pysrc/followers",
+      "following_url": "https://api.github.com/users/pysrc/following{/other_user}",
+      "gists_url": "https://api.github.com/users/pysrc/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/pysrc/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/pysrc/subscriptions",
+      "organizations_url": "https://api.github.com/users/pysrc/orgs",
+      "repos_url": "https://api.github.com/users/pysrc/repos",
+      "events_url": "https://api.github.com/users/pysrc/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/pysrc/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "created_at": "2017-09-23T13:16:46Z",
+    "updated_at": "2017-09-23T13:16:46Z",
+    "author_association": "OWNER",
+    "body": "很好！"
+  }
+]
+*/
+function getComments(comments_url,page,pageSize)
+

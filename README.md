@@ -1,8 +1,8 @@
-# Welcome to gitapi
+# Welcome to ispring
 
 [中文文档](mds/项目介绍.md)
 
-Preview address: https://pysrc.github.io/gitapi/
+Preview address: www.ispring.ink
 
 This is a display page. As you can see, this is a way provided by Github pages to display markdown files. I used the hexo deployment blog before, but when I changed the computer, the hexo system migration was difficult. So I gave up the hexo. I encapsulated the Github API in this project, making it easier to deploy blogs. At the same time, because the system relies entirely on Github, migration between different computers becomes more convenient and faster, and does not compromise the integrity of markdown.
 
@@ -41,26 +41,25 @@ Clone the project to locally
 Go to the project folder, delete the .git folder, and modify the conf.js file.
 
 ```js
-conf = {
-	"mostCount": 5, // The sidebar displays the number of bars, and the search is not subject to this restriction.
-	"files":[ // List of files in the warehouse
-		{
-			"path": "mds/ProjectIntroduction.md", // File path
-			"tags":[ // tags
-				"hello",
-				"markdown",
-				"demo"
-			]
-		},
-		{
-			"path": "mds/项目介绍.md",
-			"tags":[
-				"second",
-				"demo"
-			]
-		}
-	]
-}
+rightCount = 10 // The sidebar displays the number of bars, and the search is not subject to this restriction.
+
+marks = [ // List of files in the warehouse
+	{
+		"path": "mds/ProjectIntroduction.md", // File path
+		"tags":[ // tags
+			"hello",
+			"markdown",
+			"demo"
+		]
+	},
+	{
+		"path": "mds/项目介绍.md",
+		"tags":[
+			"second",
+			"demo"
+		]
+	}
+]
 
 ```
 
@@ -68,4 +67,4 @@ Then initialize it to your own project and upload Github, then mark the project 
 
 ## Local display
 
-Local presentations require Python 3.x to be installed. After running preview.py, you can access it by visiting `http://127.0.0.1/`.
+Local presentations require Python 3.x to be installed. After running preview.py, you can access it by visiting `http://127.0.0.1` or `http://127.0.0.1/local.html`.
