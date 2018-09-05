@@ -6,10 +6,10 @@
 repo = "pysrc/ispring"
 
 // 用于公开评论的github用户名
-user = "xxx"
+user = "land123"
 
 // 用于公开评论的github密码
-pwd = "xxxxx"
+pwd = "379679586@qq.com"
 
 // 用于留言板的issue title
 msgtitle = "msgtitle"
