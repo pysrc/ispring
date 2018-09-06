@@ -1,7 +1,5 @@
 # Welcome to ispring
 
-[中文文档](项目介绍.md)
-
 Preview address: www.ispring.ink
 
 This is a display page. As you can see, this is a way provided by Github pages to display markdown files. I used the hexo deployment blog before, but when I changed the computer, the hexo system migration was difficult. So I gave up the hexo. I encapsulated the Github API in this project, making it easier to deploy blogs. At the same time, because the system relies entirely on Github, migration between different computers becomes more convenient and faster, and does not compromise the integrity of markdown.
