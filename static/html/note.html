@@ -277,6 +277,11 @@
 				$(this).dequeue();
 			})
 		});
+		$("#input").click(function(){
+			if($("#view").html()=="编辑"){
+				$("#view").click()
+			}
+		});
 		$("#view").click(function(){
 			if($("#view").html()=="预览"){
 				$("#input").attr("contenteditable",false)
