@@ -88,7 +88,7 @@ pubaesiv = "1234567890123456"
 
 ```
 
-**注意：rsapri指向的文件并不是RSA的私钥文件，其为你自己设的进入密码经过md5加密后再经过aes加密后的RSA私钥。可进入这个网址加密你的RSA私钥：www.ispring.ink/static/html/pwd-generate.html并将加密后的数据复制粘贴到rsapri指向的文件中！**
+**注意：rsapri指向的文件并不是RSA的私钥文件，其为你自己设的进入密码经过md5加密后再经过aes加密后的RSA私钥。可进入这个网址加密你的RSA私钥：www.ispring.ink/static/html/pwd-generate.html 并将加密后的数据复制粘贴到rsapri指向的文件中！**
 
 
 ### 4.上传Github，并初设置为Github pages
