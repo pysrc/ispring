@@ -198,8 +198,9 @@
 				$("#msgmorebtn").remove()
 		}
 		var curComPage=0 // 当前页的评论页数
+		curtext="" // 当前评论内容
 		function cheakmsg(){
-			if($("#input")[0].innerText==""){
+			if(curtext==""){
 				alert("请输入留言内容!")
 				return false
 			}
@@ -210,14 +211,16 @@
 			return true
 		}
 		function submsgnow(u,p){
+			$("#view").click()
 			if(cheakmsg()){
-				var res=newComment(u,p,msgIssue.comments_url,encryptByAes(pubaeskey,pubaesiv,$("#input")[0].innerText))
+				var res=newComment(u,p,msgIssue.comments_url,encryptByAes(pubaeskey,pubaesiv,curtext))
 				if(res==null){
 					alert("用户名或密码错误！")
 				}else{
 					newComs(res,$('#comments'))
 					$('#myModal').modal('hide')
-					$("#input")[0].innerText=""
+					$("#resetmsg").click()
+					$("#view").click()
 				}
 			}
 		}
@@ -264,7 +267,6 @@
 			})
 		}
 		$(function(){
-			var curtext=""
 			$("#view").click(function(){
 				if($("#view").html()=="预览"){
 					$("#input").attr("contenteditable",false)

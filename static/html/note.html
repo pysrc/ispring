@@ -243,11 +243,13 @@
 		    padding:CryptoJS.pad.Pkcs7
 		}).ciphertext.toString();
 	}
+	curtext=""
 	function subPriMsg(u,p){
+		$("#view").click()
 		// 初始化失败
 		if(!issue)
 			return
-		if($("#input")[0].innerText==''){
+		if(curtext==''){
 			alert("请输入信息！")
 			return
 		}
@@ -255,12 +257,12 @@
 		var key=md5(new Date().getTime()).substr(0,16)
 		var iv=md5(new Date().getTime()).substr(16,16)
 		// 3.AES密钥加密数据
-		var datas=encryptByAes(key,iv,$("#input")[0].innerText)
+		var datas=encryptByAes(key,iv,curtext)
 		// 4.RSA公钥加密AES密钥
 		var keys=encrypt.encrypt(key+iv)
 		// 5.上传Issue，格式"keys<splite>datas"
 		newComs(newComment(u,p,issue.comments_url,keys+"<split>"+datas),$("#show"))
-		$("#input")[0].innerText=""
+		$("#resetmsg").click()
 	}
 	$(function() {
 		// 向后台写入数据(github用户提交模式)
@@ -275,7 +277,6 @@
 				$(this).dequeue();
 			})
 		});
-		var curtext=""
 		$("#view").click(function(){
 			if($("#view").html()=="预览"){
 				$("#input").attr("contenteditable",false)
