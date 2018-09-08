@@ -3,13 +3,13 @@
 <head>
 	<title>Coding I'm serious</title>
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-	<link rel="stylesheet" href="lib/bootstrap.min.css">
-	<script src="lib/jquery.min.js"></script>
-	<script src="lib/bootstrap.min.js"></script>
-	<script src="lib/marked.js"></script>
-	<link href="lib/agate.min.css" rel="stylesheet">
-	<script src="lib/highlight.min.js"></script>
-	<script src="lib/api.js"></script>
+	<link rel="stylesheet" href="static/css/bootstrap.min.css">
+	<script src="static/js/jquery.min.js"></script>
+	<script src="static/js/bootstrap.min.js"></script>
+	<script src="static/js/marked.js"></script>
+	<link href="static/css/agate.min.css" rel="stylesheet">
+	<script src="static/js/highlight.min.js"></script>
+	<script src="static/js/api.js"></script>
 	<script src="conf.js"></script>
 	<script>hljs.initHighlightingOnLoad();</script>
 	<script type="text/javascript">
@@ -22,26 +22,19 @@
 	</script>
 	<style type="text/css">
 		 body{
-
-		   background:url(lib/back.jpg)  no-repeat center center;
-
+		   background:url(static/img/black.jpg)  no-repeat center center;
 		   background-size:cover;
-
 		   background-attachment:fixed;
-
-		}
-		.top-buffer{
-			margin-top:200px;
 		}
 	</style>
 </head>
 <body>
 	<div class="container">
-		<div class="row top-buffer">
-			<div id="main-view" class="col-sm-9 column">
+		<div class="row" style="margin-top: 200px;">
+			<div id="main-view" class="col-lg-9" style="float: left;">
 				<div class="panel panel-primary">
 					<div class="panel-heading">
-						<h3 id="ititle" class="panel-title" onclick="scala()"></h3>
+						<h3 id="ititle" class="panel-title"></h3>
 					</div>
 					<div class="panel-body">
 						<div id="markdown"></div>
@@ -55,8 +48,7 @@
 					<li><label id="pageLabel"></label></li>
 				</ul>
 			</div>
-
-			<div id="right-view" class="col-sm-3 column">
+			<div id="right-view" class="col-lg-3" style="float: left;">
 				<div class="input-group">
 					<input id="search" type="text" class="form-control" placeholder="请输入关键词">
 			      	<span class="input-group-btn" onclick="go()">
@@ -71,10 +63,6 @@
 				</div>
 			</div>
 		</div>
-	</div>
-
-	<div class="jumbotron text-center" style="margin-bottom:0">
-	  <p>https://github.com/pysrc</p>
 	</div>
 	<script type="text/javascript">
 		var curPage = 0; // 当前页数
@@ -103,10 +91,11 @@
             });
             refrashImg()
 		}
-
 		function showPage(page){ // 根据页数显示文章
 			$("#prev_btn").show()
 			$("#next_btn").show()
+			// 收起回复框
+			$('#art-panel').collapse('hide')
 			if(page<=0){
 				page = 0
 				$("#prev_btn").hide()
@@ -124,17 +113,6 @@
 			for (var i = 0; i < maxi; i++) {
 				$("#alist").append('<li name="item"><a href="#" onclick="showPage('+arr[i]+')">'+marks[arr[i]].path.replace(/.*\/(.*?).md/g,"$1")+'</a></li>')
 			}
-		}
-		// 点击标题切换视图大小
-		function scala(){
-			if($('#main-view').attr("class")=="col-sm-12 column"){
-				$('#main-view').attr("class","col-sm-9 column")
-				$('#right-view').show()
-			}else{
-				$('#main-view').attr("class","col-sm-12 column")
-				$('#right-view').hide()
-			}
-			refrashImg()
 		}
 		function go() { // 文章查找
 			key = $("#search").val().toUpperCase()

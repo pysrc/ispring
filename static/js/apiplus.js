@@ -1,3 +1,17 @@
+function getIssueByNumber(repo,number){
+	var res=null
+	$.ajax({
+		type:"GET",
+		url:"https://api.github.com/repos/"+repo+"/issues/"+number,
+		async: false,
+		dataType: 'json',
+		success: function(data) {
+			if(data.message!="Not Found")
+				res=data
+		}
+	});
+	return res;
+}
 function getIssue(repo,title){
 	var res=null
 	$.ajax({
@@ -22,11 +36,13 @@ function getIssueFromList(issues,title){
   }
   return null
 }
-function getComments(comments_url,page,pageSize){
+function getComments(issue,page,pageSize){
 	var res
+	if(!issue)
+		return []
 	$.ajax({
 		type:"GET",
-		url:comments_url+"?page="+page+"&per_page="+pageSize,
+		url:issue.comments_url+"?page="+page+"&per_page="+pageSize,
 		async: false,
 		dataType: 'json',
 		success: function(data) {
@@ -68,4 +84,21 @@ function newComment(user,pwd,comments_url,message){
 		}
 	});
 	return res
+}
+
+function delComment(user,pwd,repo,commentId){
+	var res=false
+	$.ajax({
+			type: "DELETE",
+			url: "https://api.github.com/repos/"+repo+"/issues/comments/"+commentId,
+			async: false,
+			headers: {
+				"Authorization":"Basic "+btoa(user+":"+pwd)
+			},
+			dataType: 'json',
+			success: function(data) {
+				res=true
+			}
+		});
+	return res;
 }

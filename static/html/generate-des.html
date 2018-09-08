@@ -1,0 +1,70 @@
+﻿<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<title>DES Generate</title>
+	<script src="../js/jquery.min.js"></script>
+	<script src="../js/des/tripledes.js"></script>
+	<script src="../js/des/mode-ecb.js"></script>
+ 	<link rel="stylesheet" href="../css/bootstrap.min.css">
+	<script src="../js/bootstrap.min.js"></script>
+	<script>
+		 //DES encrypt
+		function encryptByDES(message, key) {
+				var keyHex = CryptoJS.enc.Utf8.parse(key);
+				var encrypted = CryptoJS.DES.encrypt(message, keyHex, {
+					mode: CryptoJS.mode.ECB,
+					padding: CryptoJS.pad.Pkcs7
+				});
+				return encrypted.toString();
+			}
+			//DES decrypt
+		function decryptByDES(ciphertext, key) {
+			var keyHex = CryptoJS.enc.Utf8.parse(key);
+			// direct decrypt ciphertext
+			var decrypted = CryptoJS.DES.decrypt({
+				ciphertext: CryptoJS.enc.Base64.parse(ciphertext)
+			}, keyHex, {
+				mode: CryptoJS.mode.ECB,
+				padding: CryptoJS.pad.Pkcs7
+			});
+			return decrypted.toString(CryptoJS.enc.Utf8);
+		}
+		function go(){
+			if(!$("#pwd").val())
+				return
+			if($("#encrypt").val()&&!$("#decrypt").val()){
+				$("#decrypt").val(encryptByDES($("#encrypt").val(), $("#pwd").val()))
+				$("#encrypt").val("")
+			}else if(!$("#encrypt").val()&&$("#decrypt").val()){
+				$("#encrypt").val(decryptByDES($("#decrypt").val(), $("#pwd").val()))
+				$("#decrypt").val("")
+			}else{
+				$("#encrypt").val("")
+				$("#decrypt").val("")
+			}
+		}
+	</script>
+</head>
+<body>
+<div class="container">
+   <div class="jumbotron">
+		<div class="form-group">
+			<label class="col-sm-2 control-label">Password</label>
+			<div class="col-sm-10">
+				<input type="password" class="form-control" id="pwd" 
+					   placeholder="password">
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="name">Encrypt</label>
+			<textarea id="encrypt" class="form-control" rows="3" placeholder="Encrypt message"></textarea>
+		</div>
+		<div class="form-group">
+			<label for="name">Decrypt</label>
+			<textarea id="decrypt" class="form-control" rows="3" placeholder="Decrypt message"></textarea>
+		</div>
+		<button type="button" class="btn btn-default" onclick="go()">Encrypt / Decrypt</button>
+	</div>
+</div>
+</body>
+</html>

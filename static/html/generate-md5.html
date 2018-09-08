@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Md5</title>
+  	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<script src="../js/jquery.min.js"></script>
+	<script src="../js/md5.js"></script>
+ 	<link rel="stylesheet" href="../css/bootstrap.min.css">
+	<script src="../js/bootstrap.min.js"></script>
+</head>
+<body>
+
+	<form class="form-horizontal" role="form">
+	  <div class="form-group">
+	    <label for="firstname" class="col-sm-2 control-label">Key</label>
+	    <div class="col-sm-10">
+	      <input type="text" class="form-control" id="key" placeholder="密码">
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <label for="lastname" class="col-sm-2 control-label">Md5</label>
+	    <div class="col-sm-10">
+	      <input type="text" class="form-control" id="md5code" placeholder="Md5码">
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <label for="lastname" class="col-sm-2 control-label">Md5前16位</label>
+	    <div class="col-sm-10">
+	      <input type="text" class="form-control" id="md51" placeholder="Md5前16位">
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <label for="lastname" class="col-sm-2 control-label">Md5后16位</label>
+	    <div class="col-sm-10">
+	      <input type="text" class="form-control" id="md52" placeholder="Md5后16位">
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <div class="col-sm-offset-2 col-sm-10">
+	      <button type="button" onclick="run()" class="btn btn-default">生成</button>
+	    </div>
+	  </div>
+	</form>
+
+	<script type="text/javascript">
+		function run() {
+			md5c=md5($("#key").val())
+			$("#md5code").val(md5c)
+			$("#md51").val(md5c.substr(0,16))
+			$("#md52").val(md5c.substr(16,16))
+		}
+	</script>
+</body>
+</html>

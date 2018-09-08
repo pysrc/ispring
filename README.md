@@ -1,52 +1,34 @@
-# Welcome to ispring
+## 介绍
 
-[中文文档](mds/项目介绍.md)
+预览地址: https://www.ispring.ink
 
-Preview address: www.ispring.ink
+## 目前支持
 
-This is a display page. As you can see, this is a way provided by Github pages to display markdown files. I used the hexo deployment blog before, but when I changed the computer, the hexo system migration was difficult. So I gave up the hexo. I encapsulated the Github API in this project, making it easier to deploy blogs. At the same time, because the system relies entirely on Github, migration between different computers becomes more convenient and faster, and does not compromise the integrity of markdown.
++ 博客Markdown展示
++ 留言板系统（Markdown支持）
++ 私密留言功能（RSA加密）
++ 私密日记功能（RSA加密）
 
-At present, the project supports code syntax highlighting, image, gif, keyword search, paging and other functions. More cool effects will be added in the future.
+## 初始化自己的项目
 
-Below is a picture.
+### 1. Fork这个项目到你的Github上
 
-![](mds/ProjectIntroduction/hello.png)
+### 2. pull到你本地
+`git clone xxx`
 
-Here is a Python code
+### 3. 初始化配置
 
-```python
-def say():
-    print("Hello gitapi.")
++ CNAME
+该文件中的内容指向你的网站域名，若没有，请删除之！
 
-if __name__ == "__main__":
-    say()
-    input()
-
-```
-
-More examples can visit my blog homepage
-
-[www.1vs1024.com](http://www.1vs1024.com)
-
-Github: https://github.com/pysrc/MarkdownRepos
-
-## How to build my own homepage?
-
-### Step 1
-
-Clone the project to locally
-
-### Step 2
-
-Go to the project folder, delete the .git folder, and modify the conf.js file.
++ conf.js
 
 ```js
-rightCount = 10 // The sidebar displays the number of bars, and the search is not subject to this restriction.
-
-marks = [ // List of files in the warehouse
+rightCount = 10 // 右侧边栏显示条数，查找不受此限制
+marks = [ // 仓库中的文件列表
 	{
-		"path": "mds/ProjectIntroduction.md", // File path
-		"tags":[ // tags
+		"path": "mds/ProjectIntroduction.md", // 路径
+		"tags":[ // 标签
 			"hello",
 			"markdown",
 			"demo"
@@ -63,8 +45,54 @@ marks = [ // List of files in the warehouse
 
 ```
 
-Then initialize it to your own project and upload Github, then mark the project as Github pages, usually you will be able to access it through your browser at this time.
++ confplus.js
 
-## Local display
+```js
+/**
+	需要实现留言的在此设置
+*/
 
-Local presentations require Python 3.x to be installed. After running preview.py, you can access it by visiting `http://127.0.0.1` or `http://127.0.0.1/local.html`.
+// 用于装issues的仓库名
+repo = "pysrc/ispring"
+
+// 用于匿名评论的github用户名
+user = "land123"
+
+// 用于匿名评论的github密码
+pwd = "379679586@qq.com"
+
+// 用于留言板的issues number
+msgNumber = 2
+
+// 留言分页大小
+pageSizeMsg = 4
+
+// 评论分页大小
+pageSizeCom = 4
+
+// 用于存放加密信息的issue number
+primsgNumber = 3
+
+// 用于存放RSA公钥的文件地址
+rsapub = "rsa.pub"
+
+// 用于存放AES加密后的RSA私钥文件地址
+rsapri = "rsa.pri.aes"
+
+// 用于存日记或其他重要事情的issue number
+noteNumber = 1
+
+// 用于留言板等公共的aeskey
+pubaeskey = "1234567890123456"
+pubaesiv = "1234567890123456"
+
+```
+
+**注意：rsapri指向的文件并不是RSA的私钥文件，其为你自己设的进入密码经过md5加密后再经过aes加密后的RSA私钥。可进入这个网址加密你的RSA私钥：www.ispring.ink/static/html/pwd-generate.html并将加密后的数据复制粘贴到rsapri指向的文件中！**
+
+
+### 4.上传Github，并初设置为Github pages
+
+## 默认演示页面进入密码为：123456789
+
+

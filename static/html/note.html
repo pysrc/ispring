@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Private Show</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="https://cdn.bootcss.com/marked/0.4.0/marked.js"></script>
+	<link href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/agate.min.css" rel="stylesheet">
+	<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+	<script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js"></script>
+	<script src="../js/api.js"></script>
+	<script src="../../confplus.js"></script>
+	<script src="../js/apiplus.js"></script>
+	<script src="../js/jsencrypt.min.js"></script>
+    <script src="../js/aes/aes.js"></script>
+    <script src="../js/aes/pad-zeropadding.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<script type="text/javascript">
+		marked.setOptions({
+		    renderer: new marked.Renderer(),
+		    highlight: function (code) {
+			    return hljs.highlightAuto(code).value;
+			}
+		});
+	</script>
+	<style type="text/css">
+		 body{
+		   background:url(../img/black.jpg)  no-repeat center center;
+		   background-size:cover;
+		   background-attachment:fixed;
+		}
+		.top-buffer{
+			margin-top:200px;
+		}
+	</style>
+</head>
+<body>
+	<div id="main" class="container" style="display: none;">
+		<div class="row top-buffer">
+			<div class="col-sm-9 column">
+				<div class="panel panel-primary">
+				    <div class="panel-heading">
+				        <h3 class="panel-title">日记本</h3>
+				    </div>
+				    <div class="panel-body">
+				        <form role="form">
+				            <div class="form-group">
+				            	<div id="input" contenteditable="true" style="min-height: 70px;"></div>
+				            </div>
+				            <button type="button" class="btn btn-primary" style="float: left;" data-toggle="modal" data-target="#myModal">设置登陆</button>
+				            <button type="button" id="submsg" class="btn btn-primary" data-loading-text="Loading..." style="float: right;">记录</button>
+				            <button type="button" id="resetmsg" class="btn btn-primary" style="float: right;margin-right: 10px">重置</button>
+				            <button type="button" id="view" class="btn btn-primary" style="float: right;margin-right: 10px">预览</button>
+				        </form>
+				    </div>
+				</div>
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h3 class="panel-title">日记列表</h3>
+					</div>
+					<div class="panel-body">
+						<div id="show"></div>
+						<button type="button" id="more" onclick="moremsg()" class="btn btn-default btn-lg btn-block">加载更多...</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 初始化模态框（Modal） -->
+	<div class="modal fade" id="priModal" tabindex="-1" role="dialog" aria-labelledby="priModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+						&times;
+					</button>
+					<h4 class="modal-title" id="priModalLabel">
+						请输入密码
+					</h4>
+				</div>
+				<div class="modal-body">
+					<div class="form-group">
+						<label for="name">密码</label>
+						<input id="passwd" type="password" class="form-control" rows="3"  style="resize:none" placeholder="password">
+					</div>
+					<div class="form-group">
+						<div class="checkbox">
+							<label><input id="showpwd" type="checkbox" value="">显示密码</label>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button type="button" id="btn-look" class="btn btn-primary" data-loading-text="Loading...">提交</button>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal -->
+	</div>
+	<!-- 提交密码设置（Modal） -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+						&times;
+					</button>
+					<h4 class="modal-title" id="myModalLabel">
+						登陆Github
+					</h4>
+				</div>
+				<div class="modal-body">
+					<div class="form-group">
+						<label for="name">用户名</label>
+						<input type="text" class="form-control" id="gituser" placeholder="username">
+					</div>
+					<div class="form-group">
+						<label for="name">密码</label>
+						<input type="password" class="form-control" id="gitpwd" placeholder="password">
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal -->
+	</div>
+<!-- 处理解密 -->
+<script type="text/javascript">
+	$('#priModal').modal('show')
+	issue=null
+	var curPage=0
+	var decrypt = new JSEncrypt();
+	$('#showpwd').on('click',function(){
+		if(this.checked){
+			$("#passwd").attr("type","text")
+		}else{
+			$("#passwd").attr("type","password")
+		}
+	});
+	function decryptByAes(key,iv,msg){
+		k=CryptoJS.enc.Utf8.parse(key);
+		i=CryptoJS.enc.Utf8.parse(iv);
+		encryptedHexStr=CryptoJS.enc.Hex.parse(msg);
+		encryptedBase64Str=CryptoJS.enc.Base64.stringify(encryptedHexStr);
+		return CryptoJS.AES.decrypt(encryptedBase64Str, k, {
+			iv:i,
+		    mode: CryptoJS.mode.CBC,
+		    padding: CryptoJS.pad.Pkcs7
+		}).toString(CryptoJS.enc.Utf8);
+	}
+	$(function() {
+		$("#btn-look").click(function(){
+			$(this).button('loading').delay().queue(function() {
+				go()
+				$(this).button('reset');
+				$(this).dequeue();
+			})
+		});
+		$('#passwd').keydown(function(event){ // 输入框回车搜索
+	    	if(event.keyCode == 13)
+	    	 	$("#btn-look").click()
+		});
+	});
+	function delcom(self,commentId){
+		$(self).button('loading').delay().queue(function() {
+			if($("#gituser").val()&&$("#gitpwd").val()){
+				if(delComment($("#gituser").val(),$("#gitpwd").val(),repo,commentId))
+					$("#"+commentId).remove()
+			}else
+				alert("还没设置登陆！")
+			$(self).button('reset');
+			$(self).dequeue();
+		})
+	}
+	function go(){
+		md5k=md5($("#passwd").val())
+		priRsaKey=decryptByAes(md5k.substr(0,16),md5k.substr(16,16),getText("../../"+rsapri))
+		if(!priRsaKey){
+			alert("Password is error !")
+			return
+		}else{
+			$("#main").show()
+		}
+		decrypt.setPrivateKey(priRsaKey);
+		issue=getIssueByNumber(repo,noteNumber)
+		if(issue){ // 存在私信
+			moremsg()
+		}
+		$('#priModal').modal('hide')
+	}
+	// 面板上添加新内容
+	newComs=function(comment,dom){
+		if(comment==null){
+			return
+		}
+		var avatar_url = comment.user.avatar_url; // avatar_url
+		var muser = comment.user.login;
+		if(muser==user){
+			muser="Anyone"
+		}
+		var user_link = comment.user.html_url;
+		var updated_at = new Date(comment.updated_at).toLocaleString();
+		var prebodys=comment.body.split("<split>")
+		if(prebodys.length!=2)
+			return
+		var aeskeys=decrypt.decrypt(prebodys[0]);
+		if(aeskeys.length!=32)
+			return
+		var body = decryptByAes(aeskeys.substr(0,16),aeskeys.substr(16,16),prebodys[1]);
+		var commentHtml = '<div id="'+comment.id+'" class="media"><a class="media-left" href="'+user_link+'" target="_blank"><img width="50" height="50" class="media-object" src="'+avatar_url+'" alt="媒体对象"></a><div class="media-body"><h4 class="media-heading"><a href="'+user_link+'" target="_blank">'+muser+'</a></h4><small>'+updated_at+'</small><button type="button" onclick="delcom(this,'+comment.id+')" class="btn btn-danger btn-xs" style="float: right;" data-loading-text="Loading...">删除</button><h6></h6>'+marked(body)+'</div></div><h2></h2>';
+		var new_obj = $(commentHtml);
+		new_obj.find("pre").each(function(i, block) { // 将代码块背景美化一下
+        	hljs.highlightBlock(block);
+    	});
+		dom.append(new_obj);
+	}
+	function moremsg(){
+		curPage++
+		// 获取数据
+		if(issue&&issue.comments_url){
+			msglist=getComments(issue,curPage,pageSizeMsg)
+			for(var i=0;i<msglist.length;i++){
+				newComs(msglist[i],$("#show"))
+			}
+			if(msglist.length!=pageSizeMsg){
+				$("#more").hide()
+			}
+		}
+	}
+</script>
+<!-- 处理加密 -->
+<script type="text/javascript">
+	var encrypt = new JSEncrypt();
+	encrypt.setPublicKey(getText("../../"+rsapub));
+	function encryptByAes(key,iv,msg) {
+		k=CryptoJS.enc.Utf8.parse(key);
+		i=CryptoJS.enc.Utf8.parse(iv);
+		return CryptoJS.AES.encrypt(msg, k, {
+			iv:i,
+		    mode:CryptoJS.mode.CBC,
+		    padding:CryptoJS.pad.Pkcs7
+		}).ciphertext.toString();
+	}
+	function subPriMsg(u,p){
+		// 初始化失败
+		if(!issue)
+			return
+		if($("#input")[0].innerText==''){
+			alert("请输入信息！")
+			return
+		}
+		// 2.生成AES密钥
+		var key=md5(new Date().getTime()).substr(0,16)
+		var iv=md5(new Date().getTime()).substr(16,16)
+		// 3.AES密钥加密数据
+		var datas=encryptByAes(key,iv,$("#input")[0].innerText)
+		// 4.RSA公钥加密AES密钥
+		var keys=encrypt.encrypt(key+iv)
+		// 5.上传Issue，格式"keys<splite>datas"
+		newComs(newComment(u,p,issue.comments_url,keys+"<split>"+datas),$("#show"))
+		$("#input")[0].innerText=""
+	}
+	$(function() {
+		// 向后台写入数据(github用户提交模式)
+		$("#submsg").click(function(){
+			$(this).button('loading').delay().queue(function() {
+				if($("#gituser").val()&&$("#gitpwd").val())
+					subPriMsg($("#gituser").val(),$("#gitpwd").val())
+				else{
+					alert("还没登陆账号与密码！")
+				}
+				$(this).button('reset');
+				$(this).dequeue();
+			})
+		});
+		var curtext=""
+		$("#view").click(function(){
+			if($("#view").html()=="预览"){
+				$("#input").attr("contenteditable",false)
+				curtext=$("#input")[0].innerText
+				$("#input").html(marked(curtext))
+				$("#input").children("pre").each(function(i,block){
+					hljs.highlightBlock(block);
+				});
+				$("#view").html("编辑")
+			}
+			else{
+				$("#input")[0].innerText=curtext
+				$("#input").attr("contenteditable",true)
+				$("#view").html("预览")
+			}
+		});
+		$("#resetmsg").click(function(){
+			curtext=""
+			$("#input")[0].innerText=curtext
+		});
+	});
+</script>
+</body>
+</html>

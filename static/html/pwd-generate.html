@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<title>密码生成</title>
+	<script src="../js/jquery.min.js"></script>
+	<script src="../js/md5.js"></script>
+ 	<link rel="stylesheet" href="../css/bootstrap.min.css">
+	<script src="../js/bootstrap.min.js"></script>
+    <script src="../js/aes/aes.js"></script>
+    <script src="../js/aes/pad-zeropadding.js"></script>
+</head>
+<body>
+	<form class="form-horizontal" role="form">
+	  <div class="form-group">
+	    <label for="firstname" class="col-sm-2 control-label">Key</label>
+	    <div class="col-sm-10">
+	      <input type="text" class="form-control" id="key" placeholder="密码">
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <label for="lastname" class="col-sm-2 control-label">RSA private key</label>
+	    <div class="col-sm-10">
+	  	  <textarea class="form-control" id="rsakey" placeholder="RSA密钥"></textarea>
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <label for="lastname" class="col-sm-2 control-label">MD5 AES RSA key</label>
+	    <div class="col-sm-10">
+	  	  <textarea class="form-control" id="prikeyfile" placeholder="密钥加密版"></textarea>
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <div class="col-sm-offset-2 col-sm-10">
+	      <button type="button" onclick="run()" class="btn btn-default">生成</button>
+	    </div>
+	  </div>
+	</form>
+	<script type="text/javascript">
+		function encryptByAes(key,iv,msg) {
+			k=CryptoJS.enc.Utf8.parse(key);
+			i=CryptoJS.enc.Utf8.parse(iv);
+			return CryptoJS.AES.encrypt(msg, k, {
+				iv:i,
+			    mode:CryptoJS.mode.CBC,
+			    padding:CryptoJS.pad.Pkcs7
+			}).ciphertext.toString();
+		}
+		function run() {
+			// 1.密码生成MD5码
+			md5code=md5($("#key").val())
+			// 2.取MD5前16位为AES的key
+			key_aes=md5code.substr(0,16)
+			// 3.取MD5的后16位为AES的IV
+			iv_aes=md5code.substr(16,16)
+			// 4.通过AES加密RSA的密钥
+			$("#prikeyfile").val(encryptByAes(key_aes,iv_aes,$("#rsakey").val()))
+		}
+	</script>
+</body>
+</html>
