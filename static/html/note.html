@@ -126,6 +126,13 @@
 			</div><!-- /.modal-content -->
 		</div><!-- /.modal -->
 	</div>
+<script src="../../confback.js"></script>
+<script type="text/javascript">
+	if(window.sessionStorage.getItem("imgback")){
+		imgcur=parseInt(window.sessionStorage.getItem("imgback"))
+	}
+	document.body.style.backgroundImage="url("+imgelsepre+imgbacks[imgcur]+")"
+</script>
 <!-- 处理解密 -->
 <script type="text/javascript">
 	$('#priModal').modal('show')

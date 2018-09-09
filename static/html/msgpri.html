@@ -18,7 +18,7 @@
     <script src="../js/aes/pad-zeropadding.js"></script>
 	<style type="text/css">
 		 body{
-		   background:url(../img/black.jpg)  no-repeat center center;
+		   background:no-repeat center center;
 		   background-size:cover;
 		   background-attachment:fixed;
 		}
@@ -102,6 +102,13 @@
 			</div><!-- /.modal-content -->
 		</div><!-- /.modal -->
 	</div>
+<script src="../../confback.js"></script>
+<script type="text/javascript">
+	if(window.sessionStorage.getItem("imgback")){
+		imgcur=parseInt(window.sessionStorage.getItem("imgback"))
+	}
+	document.body.style.backgroundImage="url("+imgelsepre+imgbacks[imgcur]+")"
+</script>
 <script type="text/javascript">
 	$('#priModal').modal('show')
 	var issue=null

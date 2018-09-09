@@ -22,7 +22,7 @@
 	</script>
 	<style type="text/css">
 		 body{
-		   background:url(static/img/black.jpg)  no-repeat center center;
+		   background:no-repeat center center;
 		   background-size:cover;
 		   background-attachment:fixed;
 		}
@@ -44,6 +44,7 @@
 		<div class="row" style="margin-top: 100px;">
 			<div class="list-group" class="col-xs-1" style="float: left">
 				<ul class="nav nav-pills nav-stacked">
+					<li><a href="#" onclick="changeBackImg()">切换背景</a></li>
 					<li><a href="#" data-toggle="modal" data-target="#priModal">私密留言</a></li>
 					<li><a href="static/html/msg.html" target="_blank">我的留言</a></li>
 					<li><a href="static/html/msgpri.html" target="_blank">我的私信</a></li>
@@ -127,6 +128,7 @@
 			</div><!-- /.modal-content -->
 		</div><!-- /.modal -->
 	</div>
+	<script src="confback.js"></script>
 	<script type="text/javascript">
 		var curPage = 0; // 当前页数
 		// 显示首页文章
@@ -187,6 +189,13 @@
 				}
 			}
 			showList(arr, arr.length)
+		}
+		document.body.style.backgroundImage="url("+imgindexpre+imgbacks[imgcur]+")"
+		function changeBackImg(){ // 改变网页背景图
+			if(++imgcur>=imgbacks.length)
+				imgcur=0
+			window.sessionStorage.setItem("imgback",imgcur) // 传递给其他子页面
+			document.body.style.backgroundImage="url("+imgindexpre+imgbacks[imgcur]+")"
 		}
 	</script>
 	<!-- rsa加密 -->
