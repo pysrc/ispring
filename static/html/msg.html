@@ -211,7 +211,6 @@
 			return true
 		}
 		function submsgnow(u,p){
-			$("#view").click()
 			if(cheakmsg()){
 				var res=newComment(u,p,msgIssue.comments_url,encryptByAes(pubaeskey,pubaesiv,curtext))
 				if(res==null){
@@ -220,13 +219,14 @@
 					newComs(res,$('#comments'))
 					$('#myModal').modal('hide')
 					$("#resetmsg").click()
-					$("#view").click()
 				}
 			}
 		}
 		$(function() {
-			// 点击评论按钮触发
+			// 点击留言按钮触发
 			$("#submsg").click(function(){
+				if($("#view").html()=="预览") // 编辑状态,更新值
+					curtext=$("#input")[0].innerText
 				$("#gituser").val($("#igituser").val())
 				$("#gitpwd").val($("#igitpwd").val())
 			});
@@ -273,7 +273,7 @@
 				}
 			});
 			$("#view").click(function(){
-				if($("#view").html()=="预览"){
+				if($("#view").html()=="预览"){ // 点击预览按钮
 					$("#input").attr("contenteditable",false)
 					curtext=$("#input")[0].innerText
 					$("#input").html(marked(curtext))
@@ -282,7 +282,7 @@
 					});
 					$("#view").html("编辑")
 				}
-				else{
+				else{ // 点击编辑按钮
 					$("#input")[0].innerText=curtext
 					$("#input").attr("contenteditable",true)
 					$("#view").html("预览")

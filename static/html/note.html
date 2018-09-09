@@ -267,6 +267,8 @@
 	$(function() {
 		// 向后台写入数据(github用户提交模式)
 		$("#submsg").click(function(){
+			if($("#view").html()=="预览") // 编辑状态,更新值
+				curtext=$("#input")[0].innerText
 			$(this).button('loading').delay().queue(function() {
 				if($("#gituser").val()&&$("#gitpwd").val())
 					subPriMsg($("#gituser").val(),$("#gitpwd").val())
