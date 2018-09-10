@@ -14,20 +14,17 @@ pwd = "379679586@qq.com"
 // 用于留言板的issues number
 msgNumber = 2
 
-// 留言分页大小
-pageSizeMsg = 4
-
-// 评论分页大小
-pageSizeCom = 4
-
-// 用于存放加密信息的issue number
+// 用于存放加密留言信息的issue number
 primsgNumber = 3
+
+// 用于存加密日记或其他重要事情的issue number
+noteNumber = 1
+
+// 上述三个issues分页大小
+pageSizeMsg = 4
 
 // 用于存放RSA公钥的文件地址
 rsapub = "encrypt/rsa.pub"
 
 // 用于存放AES加密后的RSA私钥文件地址
 rsapri = "encrypt/rsa.pri.aes"
-
-// 用于存日记或其他重要事情的issue number
-noteNumber = 1

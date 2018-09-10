@@ -9,7 +9,7 @@
 	<script src="static/js/marked.js"></script>
 	<link href="static/css/agate.min.css" rel="stylesheet">
 	<script src="static/js/highlight.min.js"></script>
-	<script src="static/js/api.js"></script>
+	<script src="static/js/base.js"></script>
 	<script src="config/article.js"></script>
 	<script>hljs.initHighlightingOnLoad();</script>
 	<script type="text/javascript">
@@ -25,6 +25,19 @@
 		   background:url(static/img/black.jpg)  no-repeat center center;
 		   background-size:cover;
 		   background-attachment:fixed;
+		}
+		.scroll-bar{
+		    position: fixed;
+		    z-index: 100;
+		    bottom: 40px;
+		    left: 50%;
+		    margin-left: 570px;
+		}
+		.up-btn{
+			width: 62px;
+			height: 32px;
+			display: none;
+			background-image: url(static/img/up.png);
 		}
 	</style>
 </head>
@@ -63,6 +76,9 @@
 				</div>
 			</div>
 		</div>
+	</div>
+	<div class="scroll-bar">
+		<a href="javascript:void 0;" id="sbar" class="up-btn"></a>
 	</div>
 	<script type="text/javascript">
 		var curPage = 0; // 当前页数
@@ -124,6 +140,17 @@
 			}
 			showList(arr, arr.length)
 		}
+		$("#sbar").click(function(){
+			$("html, body").animate({
+				scrollTop: 0
+			}, 300)
+		});
+		$(window).scroll(function(){
+			if($(window).scrollTop()>100)
+				$("#sbar")[0].style.display="block"
+			else
+				$("#sbar")[0].style.display="none"
+		});
 	</script>
 </body>
 </html>

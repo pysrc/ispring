@@ -1,0 +1,21 @@
+body{
+background:no-repeat center center;
+background-size:cover;
+background-attachment:fixed;
+}
+.top-buffer{
+	margin-top:200px;
+}
+.scroll-bar{
+position: fixed;
+z-index: 100;
+bottom: 40px;
+left: 50%;
+margin-left: 570px;
+}
+.up-btn{
+width: 62px;
+height: 32px;
+display: none;
+background-image:url(../img/up.png);
+}
