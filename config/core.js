@@ -24,15 +24,10 @@ pageSizeCom = 4
 primsgNumber = 3
 
 // 用于存放RSA公钥的文件地址
-rsapub = "rsa.pub"
+rsapub = "encrypt/rsa.pub"
 
 // 用于存放AES加密后的RSA私钥文件地址
-rsapri = "rsa.pri.aes"
+rsapri = "encrypt/rsa.pri.aes"
 
 // 用于存日记或其他重要事情的issue number
 noteNumber = 1
-
-// 用于留言板等公共的aeskey
-pubaeskey = "1234567890123456"
-pubaesiv = "1234567890123456"
-

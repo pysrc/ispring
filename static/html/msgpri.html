@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<script type="text/javascript">
+		BasePath="../../"
+	</script>
 	<title>Private Show</title>
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 	<link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
@@ -11,7 +14,7 @@
 	<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
 	<script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js"></script>
 	<script src="../js/api.js"></script>
-	<script src="../../confplus.js"></script>
+	<script src="../../config/core.js"></script>
 	<script src="../js/apiplus.js"></script>
 	<script src="../js/jsencrypt.min.js"></script>
     <script src="../js/aes/aes.js"></script>
@@ -102,12 +105,12 @@
 			</div><!-- /.modal-content -->
 		</div><!-- /.modal -->
 	</div>
-<script src="../../confback.js"></script>
+<script src="../../config/images.js"></script>
 <script type="text/javascript">
 	if(window.sessionStorage.getItem("imgback")){
 		imgcur=parseInt(window.sessionStorage.getItem("imgback"))
 	}
-	document.body.style.backgroundImage="url("+imgelsepre+imgbacks[imgcur]+")"
+	document.body.style.backgroundImage="url("+BasePath+imgbacks[imgcur]+")"
 </script>
 <script type="text/javascript">
 	$('#priModal').modal('show')
@@ -148,7 +151,7 @@
 
 	function go(){
 		md5k=md5($("#passwd").val())
-		priRsaKey=decryptByAes(md5k.substr(0,16),md5k.substr(16,16),getText("../../"+rsapri))
+		priRsaKey=decryptByAes(md5k.substr(0,16),md5k.substr(16,16),getText(BasePath+rsapri))
 		if(!priRsaKey){
 			alert("Password is error !")
 			return

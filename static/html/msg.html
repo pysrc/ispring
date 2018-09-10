@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<script type="text/javascript">
+		BasePath="../../"
+	</script>
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 	<title>Message</title>
 	<link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
@@ -10,11 +13,8 @@
 	<link href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/agate.min.css" rel="stylesheet">
 	<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
 	<script src="../js/api.js"></script>
-	<script src="../../conf.js"></script>
-	<script src="../../confplus.js"></script>
+	<script src="../../config/core.js"></script>
 	<script src="../js/apiplus.js"></script>
-    <script src="../js/aes/aes.js"></script>
-    <script src="../js/aes/pad-zeropadding.js"></script>
 	<script>hljs.initHighlightingOnLoad();</script>
 	<script type="text/javascript">
 		marked.setOptions({
@@ -47,6 +47,7 @@
 				        <form role="form">
 				            <div class="form-group">
 				            	<div id="input" contenteditable="true" style="min-height: 70px;"></div>
+				            	<div id="preview"></div>
 				            </div>
 				            <button type="button" class="btn btn-primary" style="float: left;" data-toggle="modal" data-target="#userModal">设置登陆</button>
 				            <button type="button" id="submsg" class="btn btn-primary" style="float: right;" data-toggle="modal" data-target="#myModal">留言</button>
@@ -125,34 +126,14 @@
 			</div><!-- /.modal-content -->
 		</div><!-- /.modal -->
 	</div>
-	<script src="../../confback.js"></script>
+	<script src="../../config/images.js"></script>
 	<script type="text/javascript">
 		if(window.sessionStorage.getItem("imgback")){
 			imgcur=parseInt(window.sessionStorage.getItem("imgback"))
 		}
-		document.body.style.backgroundImage="url("+imgelsepre+imgbacks[imgcur]+")"
+		document.body.style.backgroundImage="url("+BasePath+imgbacks[imgcur]+")"
 	</script>
 	<script type="text/javascript">
-		function encryptByAes(key,iv,msg) {
-			k=CryptoJS.enc.Utf8.parse(key);
-			i=CryptoJS.enc.Utf8.parse(iv);
-			return CryptoJS.AES.encrypt(msg, k, {
-				iv:i,
-			    mode:CryptoJS.mode.CBC,
-			    padding:CryptoJS.pad.Pkcs7
-			}).ciphertext.toString();
-		}
-		function decryptByAes(key,iv,msg){
-			k=CryptoJS.enc.Utf8.parse(key);
-			i=CryptoJS.enc.Utf8.parse(iv);
-			encryptedHexStr=CryptoJS.enc.Hex.parse(msg);
-			encryptedBase64Str=CryptoJS.enc.Base64.stringify(encryptedHexStr);
-			return CryptoJS.AES.decrypt(encryptedBase64Str, k, {
-				iv:i,
-			    mode: CryptoJS.mode.CBC,
-			    padding: CryptoJS.pad.Pkcs7
-			}).toString(CryptoJS.enc.Utf8);
-		}
 		//本地issue缓存
 		var msgIssue=null
 		// 面板上添加新内容
@@ -167,7 +148,7 @@
 			}
 			var user_link = comment.user.html_url;
 			var updated_at = new Date(comment.updated_at).toLocaleString();
-			var body = decryptByAes(pubaeskey,pubaesiv,comment.body);
+			var body=comment.body;
 			var commentHtml = '<div id="'+comment.id+'" class="media"><a class="media-left" href="'+user_link+'" target="_blank"><img width="50" height="50" class="media-object" src="'+avatar_url+'" alt="媒体对象"></a><div class="media-body"><h4 class="media-heading"><a href="'+user_link+'" target="_blank">'+muser+'</a></h4><small>'+updated_at+'</small><button type="button" onclick="delcom(this,'+comment.id+')" class="btn btn-danger btn-xs" style="float: right;" data-loading-text="Loading...">删除</button><h6></h6>'+marked(body)+'</div></div><h2></h2>';
 			var new_obj = $(commentHtml);
 			new_obj.find("pre").each(function(i, block) { // 将代码块背景美化一下
@@ -205,9 +186,8 @@
 				$("#msgmorebtn").remove()
 		}
 		var curComPage=0 // 当前页的评论页数
-		curtext="" // 当前评论内容
 		function cheakmsg(){
-			if(curtext==""){
+			if($("#input")[0].innerText==""){
 				alert("请输入留言内容!")
 				return false
 			}
@@ -219,7 +199,7 @@
 		}
 		function submsgnow(u,p){
 			if(cheakmsg()){
-				var res=newComment(u,p,msgIssue.comments_url,encryptByAes(pubaeskey,pubaesiv,curtext))
+				var res=newComment(u,p,msgIssue.comments_url,$("#input")[0].innerText)
 				if(res==null){
 					alert("用户名或密码错误！")
 				}else{
@@ -232,8 +212,7 @@
 		$(function() {
 			// 点击留言按钮触发
 			$("#submsg").click(function(){
-				if($("#view").html()=="预览") // 编辑状态,更新值
-					curtext=$("#input")[0].innerText
+				$("#preview").click()
 				$("#gituser").val($("#igituser").val())
 				$("#gitpwd").val($("#igitpwd").val())
 			});
@@ -274,30 +253,24 @@
 			})
 		}
 		$(function(){
-			$("#input").click(function(){
-				if($("#view").html()=="编辑"){
-					$("#view").click()
-				}
+			$("#preview").click(function(){// 进入编辑状态
+				$("#input").show()
+				$("#preview").hide()
+				$("#view").attr('disabled',false)
 			});
-			$("#view").click(function(){
-				if($("#view").html()=="预览"){ // 点击预览按钮
-					$("#input").attr("contenteditable",false)
-					curtext=$("#input")[0].innerText
-					$("#input").html(marked(curtext))
-					$("#input").children("pre").each(function(i,block){
-						hljs.highlightBlock(block);
-					});
-					$("#view").html("编辑")
-				}
-				else{ // 点击编辑按钮
-					$("#input")[0].innerText=curtext
-					$("#input").attr("contenteditable",true)
-					$("#view").html("预览")
-				}
+			$("#view").click(function(){ // 预览按钮，进入预览状态
+				$("#view").attr('disabled',true)
+				$("#preview").html(marked($("#input")[0].innerText))
+				$("#preview").children("pre").each(function(i,block){
+					hljs.highlightBlock(block);
+				});
+				$("#input").hide()
+				$("#preview").show()
 			});
 			$("#resetmsg").click(function(){
-				curtext=""
-				$("#input")[0].innerText=curtext
+				$("#preview").click()
+				$("#input").html("")
+				$("#preview").html("")
 			});
 		})
 	</script>

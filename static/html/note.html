@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<script type="text/javascript">
+		BasePath="../../"
+	</script>
 	<title>Private Show</title>
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 	<link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
@@ -11,7 +14,7 @@
 	<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
 	<script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js"></script>
 	<script src="../js/api.js"></script>
-	<script src="../../confplus.js"></script>
+	<script src="../../config/core.js"></script>
 	<script src="../js/apiplus.js"></script>
 	<script src="../js/jsencrypt.min.js"></script>
     <script src="../js/aes/aes.js"></script>
@@ -48,6 +51,7 @@
 				        <form role="form">
 				            <div class="form-group">
 				            	<div id="input" contenteditable="true" style="min-height: 70px;"></div>
+				            	<div id="preview"></div>
 				            </div>
 				            <button type="button" class="btn btn-primary" style="float: left;" data-toggle="modal" data-target="#myModal">设置登陆</button>
 				            <button type="button" id="submsg" class="btn btn-primary" data-loading-text="Loading..." style="float: right;">记录</button>
@@ -126,12 +130,12 @@
 			</div><!-- /.modal-content -->
 		</div><!-- /.modal -->
 	</div>
-<script src="../../confback.js"></script>
+<script src="../../config/images.js"></script>
 <script type="text/javascript">
 	if(window.sessionStorage.getItem("imgback")){
 		imgcur=parseInt(window.sessionStorage.getItem("imgback"))
 	}
-	document.body.style.backgroundImage="url("+imgelsepre+imgbacks[imgcur]+")"
+	document.body.style.backgroundImage="url("+BasePath+imgbacks[imgcur]+")"
 </script>
 <!-- 处理解密 -->
 <script type="text/javascript">
@@ -183,7 +187,7 @@
 	}
 	function go(){
 		md5k=md5($("#passwd").val())
-		priRsaKey=decryptByAes(md5k.substr(0,16),md5k.substr(16,16),getText("../../"+rsapri))
+		priRsaKey=decryptByAes(md5k.substr(0,16),md5k.substr(16,16),getText(BasePath+rsapri))
 		if(!priRsaKey){
 			alert("Password is error !")
 			return
@@ -240,7 +244,7 @@
 <!-- 处理加密 -->
 <script type="text/javascript">
 	var encrypt = new JSEncrypt();
-	encrypt.setPublicKey(getText("../../"+rsapub));
+	encrypt.setPublicKey(getText(BasePath+rsapub));
 	function encryptByAes(key,iv,msg) {
 		k=CryptoJS.enc.Utf8.parse(key);
 		i=CryptoJS.enc.Utf8.parse(iv);
@@ -250,13 +254,12 @@
 		    padding:CryptoJS.pad.Pkcs7
 		}).ciphertext.toString();
 	}
-	curtext=""
 	function subPriMsg(u,p){
 		$("#view").click()
 		// 初始化失败
 		if(!issue)
 			return
-		if(curtext==''){
+		if($("#input")[0].innerText==''){
 			alert("请输入信息！")
 			return
 		}
@@ -264,7 +267,7 @@
 		var key=md5(new Date().getTime()).substr(0,16)
 		var iv=md5(new Date().getTime()).substr(16,16)
 		// 3.AES密钥加密数据
-		var datas=encryptByAes(key,iv,curtext)
+		var datas=encryptByAes(key,iv,$("#input")[0].innerText)
 		// 4.RSA公钥加密AES密钥
 		var keys=encrypt.encrypt(key+iv)
 		// 5.上传Issue，格式"keys<splite>datas"
@@ -272,44 +275,37 @@
 		$("#resetmsg").click()
 	}
 	$(function() {
-		// 向后台写入数据(github用户提交模式)
+		// 向后台写入数据
 		$("#submsg").click(function(){
-			if($("#view").html()=="预览") // 编辑状态,更新值
-				curtext=$("#input")[0].innerText
+			$("#preview").click()
 			$(this).button('loading').delay().queue(function() {
 				if($("#gituser").val()&&$("#gitpwd").val())
 					subPriMsg($("#gituser").val(),$("#gitpwd").val())
 				else{
-					alert("还没登陆账号与密码！")
+					alert("还没设置登陆！")
 				}
 				$(this).button('reset');
 				$(this).dequeue();
 			})
 		});
-		$("#input").click(function(){
-			if($("#view").html()=="编辑"){
-				$("#view").click()
-			}
+		$("#preview").click(function(){
+			$("#input").show()
+			$("#preview").hide()
+			$("#view").attr('disabled',false)
 		});
 		$("#view").click(function(){
-			if($("#view").html()=="预览"){
-				$("#input").attr("contenteditable",false)
-				curtext=$("#input")[0].innerText
-				$("#input").html(marked(curtext))
-				$("#input").children("pre").each(function(i,block){
-					hljs.highlightBlock(block);
-				});
-				$("#view").html("编辑")
-			}
-			else{
-				$("#input")[0].innerText=curtext
-				$("#input").attr("contenteditable",true)
-				$("#view").html("预览")
-			}
+			$("#view").attr('disabled',true)
+			$("#preview").html(marked($("#input")[0].innerText))
+			$("#preview").children("pre").each(function(i,block){
+				hljs.highlightBlock(block);
+			});
+			$("#input").hide()
+			$("#preview").show()
 		});
 		$("#resetmsg").click(function(){
-			curtext=""
-			$("#input")[0].innerText=curtext
+			$("#preview").click()
+			$("#input").html("")
+			$("#preview").html("")
 		});
 	});
 </script>

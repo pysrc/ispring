@@ -53,6 +53,8 @@ function getComments(issue,page,pageSize){
 }
 function newIssue(user,pwd,repos,title){
 	var res
+	var data={}
+	data.title=title
 	$.ajax({
 		type:"POST",
 		url:"https://api.github.com/repos/"+repos+"/issues",
@@ -60,7 +62,7 @@ function newIssue(user,pwd,repos,title){
 		headers: {
 			"Authorization":"Basic "+btoa(user+":"+pwd)
 		},
-		data:'{"title":"'+title+'"}',
+		data:JSON.stringify(data),
 		dataType: 'json',
 		success: function(data) {
 			res=data;
@@ -70,6 +72,8 @@ function newIssue(user,pwd,repos,title){
 }
 function newComment(user,pwd,comments_url,message){
 	var res
+	var body={}
+	body.body=message
 	$.ajax({
 		type: "POST",
 		url: comments_url,
@@ -77,7 +81,7 @@ function newComment(user,pwd,comments_url,message){
 		headers: {
 			"Authorization":"Basic "+btoa(user+":"+pwd)
 		},
-		data:'{"body":"'+message+'"}',
+		data:JSON.stringify(body),
 		dataType: 'json',
 		success: function(data) {
 			res=data;

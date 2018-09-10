@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<script type="text/javascript">
+		BasePath=""
+	</script>
 	<title>Coding I'm serious</title>
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 	<link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
@@ -10,7 +13,7 @@
 	<link href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/agate.min.css" rel="stylesheet">
 	<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
 	<script src="static/js/api.js"></script>
-	<script src="conf.js"></script>
+	<script src="config/article.js"></script>
 	<script>hljs.initHighlightingOnLoad();</script>
 	<script type="text/javascript">
 		marked.setOptions({
@@ -44,7 +47,7 @@
 		<div class="row" style="margin-top: 100px;">
 			<div class="list-group" class="col-xs-1" style="float: left">
 				<ul class="nav nav-pills nav-stacked">
-					<li><a href="#" onclick="changeBackImg()">切换背景</a></li>
+					<li><a href="#" onclick="changeBackImg();return false;">切换背景</a></li>
 					<li><a href="#" data-toggle="modal" data-target="#priModal">私密留言</a></li>
 					<li><a href="static/html/msg.html" target="_blank">我的留言</a></li>
 					<li><a href="static/html/msgpri.html" target="_blank">我的私信</a></li>
@@ -128,7 +131,7 @@
 			</div><!-- /.modal-content -->
 		</div><!-- /.modal -->
 	</div>
-	<script src="confback.js"></script>
+	<script src="config/images.js"></script>
 	<script type="text/javascript">
 		var curPage = 0; // 当前页数
 		// 显示首页文章
@@ -190,16 +193,16 @@
 			}
 			showList(arr, arr.length)
 		}
-		document.body.style.backgroundImage="url("+imgindexpre+imgbacks[imgcur]+")"
+		document.body.style.backgroundImage="url("+BasePath+imgbacks[imgcur]+")"
 		function changeBackImg(){ // 改变网页背景图
 			if(++imgcur>=imgbacks.length)
 				imgcur=0
 			window.sessionStorage.setItem("imgback",imgcur) // 传递给其他子页面
-			document.body.style.backgroundImage="url("+imgindexpre+imgbacks[imgcur]+")"
+			document.body.style.backgroundImage="url("+BasePath+imgbacks[imgcur]+")"
 		}
 	</script>
 	<!-- rsa加密 -->
-	<script src="confplus.js"></script>
+	<script src="config/core.js"></script>
 	<script src="static/js/apiplus.js"></script>
 	<script src="static/js/jsencrypt.min.js"></script>
     <script src="static/js/aes/aes.js"></script>
@@ -232,7 +235,7 @@
 			var datas=encryptByAes(key,iv,$('#priMsg').val())
 			// 4.RSA公钥加密AES密钥
 			var encrypt = new JSEncrypt();
-			encrypt.setPublicKey(getText(rsapub));
+			encrypt.setPublicKey(getText(BasePath+rsapub));
 			var keys=encrypt.encrypt(key+iv)
 			// 5.上传Issue，格式"keys<splite>datas"
 			newComment(u,p,rsaIssue.comments_url,keys+"<split>"+datas)
