@@ -131,7 +131,12 @@
 	$(function() {
 		$("#ok-btn").click(function(){
 			$(this).button('loading').delay().queue(function() {
-				go()
+				try{
+					go()
+				}catch(e){
+					if(e.toString()=="Error: Malformed UTF-8 data")
+						alert("密码错误，禁止访问！")
+				}
 				$(this).button('reset');
 				$(this).dequeue();
 			})
