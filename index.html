@@ -240,8 +240,8 @@
 				alert('博主还没有开启秘密留言功能！')
 			}
 			// 2.生成AES密钥
-			var key=md5(new Date().getTime()).substr(0,16)
-			var iv=md5(new Date().getTime()).substr(16,16)
+			var key=md5(Math.random()).substr(0,16)
+			var iv=md5(Math.random()).substr(16,16)
 			// 3.AES密钥加密数据
 			var datas=encryptByAes(key,iv,$('#priMsg').val())
 			// 4.RSA公钥加密AES密钥
