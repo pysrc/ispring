@@ -4,7 +4,7 @@
 	<script type="text/javascript">
 		BasePath=""
 	</script>
-	<title>Coding I'm serious</title>
+	<title></title>
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 	<link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 	<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
@@ -14,6 +14,7 @@
 	<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
 	<script src="static/js/base.js"></script>
 	<script src="config/article.js"></script>
+	<script src="config/core.js"></script>
 	<link href="static/css/base.css" rel="stylesheet">
 	<script>hljs.initHighlightingOnLoad();</script>
 	<script type="text/javascript">
@@ -36,7 +37,7 @@
 	</script>
 </head>
 <body>
-	<center><h1 style="margin-top: 90px">Coding I'm serious</h1> </center>
+	<center><h1 style="margin-top: 90px" id="iheader"></h1> </center>
 	<div class="container-fluid">
 		<div class="row" style="margin-top: 100px;">
 			<div class="list-group" class="col-xs-1" style="float: left">
@@ -143,6 +144,8 @@
 	</script>
 	<script src="config/images.js"></script>
 	<script type="text/javascript">
+		$("title").html(indexTitle)
+		$("#iheader").html(indexHeader)
 		var curPage = 0; // 当前页数
 		setTimeout(function(){
 			// 显示首页文章
@@ -170,9 +173,9 @@
     		maxw = $("#markdown").width()
     		$('img').attr('style',"max-width:"+maxw+"px") // 防止图片跑出div
     	}
-		function show(filepath){ // 显示文章
-			$("#ititle").html(filepath.replace(/.*\/(.*?).md/g,"$1"))
-			$("#markdown").html(marked(getMarkdown(filepath)))
+		function show(){ // 显示文章
+			$("#ititle").html(marks[curPage].name)
+			$("#markdown").html(marked(getMarkdown(markdir,marks[curPage].name)))
 			$("#markdown").children("pre").each(function(i, block) { // 将代码块背景美化一下
                 hljs.highlightBlock(block);
             });
@@ -192,21 +195,21 @@
 				$("#next_btn").hide()
 			}
 			curPage = page
-			show(marks[curPage].path)
+			show()
 			$("#pageLabel").html("第"+(curPage+1)+"页，共"+marks.length+"页")
 		}
 		function showList(arr, num){ // 显示文章列表
 			$('li[name="item"]').remove()
 			maxi = num < arr.length ? num : arr.length
 			for (var i = 0; i < maxi; i++) {
-				$("#alist").append('<li name="item"><a href="#" onclick="showPage('+arr[i]+')">'+marks[arr[i]].path.replace(/.*\/(.*?).md/g,"$1")+'</a></li>')
+				$("#alist").append('<li name="item"><a href="#" onclick="showPage('+arr[i]+')">'+marks[arr[i]].name+'</a></li>')
 			}
 		}
 		function go() { // 文章查找
 			key = $("#search").val().toUpperCase()
 			arr = new Array()
 			for (var i = 0; i < marks.length; i++) {
-				if(marks[i].path.toUpperCase().indexOf(key)!=-1 || marks[i].tags.join('|').toUpperCase().indexOf(key)!=-1){
+				if(marks[i].name.toUpperCase().indexOf(key)!=-1 || marks[i].tags.join('|').toUpperCase().indexOf(key)!=-1){
 					arr.push(i)
 				}
 			}
@@ -214,7 +217,6 @@
 		}
 	</script>
 	<!-- rsa加密 -->
-	<script src="config/core.js"></script>
 	<script src="static/js/jsencrypt.min.js"></script>
     <script src="static/js/aes/aes.js"></script>
     <script src="static/js/aes/pad-zeropadding.js"></script>

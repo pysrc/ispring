@@ -5,6 +5,12 @@
 // 用于装issues的仓库名
 repo = "pysrc/ispring"
 
+// 首页标题
+indexTitle = "Coding I'm serious"
+
+// 首页头标题
+indexHeader = "Welcome To Ispring"
+
 // 用于匿名评论的github用户名
 user = "land123"
 

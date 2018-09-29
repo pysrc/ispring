@@ -29,13 +29,11 @@
 
 ```js
 rightCount = 10 // 右侧边栏显示条数，查找不受此限制
+markdir = "mds/" // markdown文件存放地址
 marks = [ // 仓库中的文件列表
 	{
-		"path": "mds/项目介绍.md",// 路径
-		"tags":[// 标签
-			"second",
-			"demo"
-		]
+		"name": "项目介绍",
+		"tags":["second","demo"]
 	}
 ]
 
@@ -50,6 +48,12 @@ marks = [ // 仓库中的文件列表
 
 // 用于装issues的仓库名
 repo = "pysrc/ispring"
+
+// 首页标题
+indexTitle = "Coding I'm serious"
+
+// 首页头标题
+indexHeader = "Welcome To Ispring"
 
 // 用于匿名评论的github用户名
 user = "land123"

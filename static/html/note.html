@@ -183,6 +183,10 @@
 			$(self).dequeue();
 		})
 	}
+	function editcom(self,commentId){
+		$("#input")[0].innerText=$("#"+commentId).children("input").val()
+		$("#sbar").click()
+	}
 	function go(){
 		md5k=md5($("#passwd").val())
 		priRsaKey=decryptByAes(md5k.substr(0,16),md5k.substr(16,16),getText(BasePath+rsapri))
@@ -218,7 +222,7 @@
 		if(aeskeys.length!=32)
 			return
 		var body = decryptByAes(aeskeys.substr(0,16),aeskeys.substr(16,16),prebodys[1]);
-		var commentHtml = '<div id="'+comment.id+'" class="media"><a class="media-left" href="'+user_link+'" target="_blank"><img width="50" height="50" class="media-object" src="'+avatar_url+'" alt="媒体对象"></a><div class="media-body"><h4 class="media-heading"><a href="'+user_link+'" target="_blank">'+muser+'</a></h4><small>'+updated_at+'</small><button type="button" onclick="delcom(this,'+comment.id+')" class="btn btn-danger btn-xs" style="float: right;" data-loading-text="Loading...">删除</button><h6></h6>'+marked(body)+'</div></div><h2></h2>';
+		var commentHtml = '<div id="'+comment.id+'" class="media"><input type="hidden" value="'+body+'"><a class="media-left" href="'+user_link+'" target="_blank"><img width="50" height="50" class="media-object" src="'+avatar_url+'" alt="媒体对象"></a><div class="media-body"><h4 class="media-heading"><a href="'+user_link+'" target="_blank">'+muser+'</a></h4><small>'+updated_at+'</small><button type="button" onclick="delcom(this,'+comment.id+')" class="btn btn-danger btn-xs" style="float: right;" data-loading-text="Loading...">删除</button><button type="button" class="btn btn-primary btn-xs" style="float: right;margin-right: 5px" onclick="editcom(this,'+comment.id+')">编辑</button><h6></h6>'+marked(body)+'</div></div><h2></h2>';
 		var new_obj = $(commentHtml);
 		new_obj.find("pre").each(function(i, block) { // 将代码块背景美化一下
         	hljs.highlightBlock(block);
@@ -289,6 +293,7 @@
 			$("#input").show()
 			$("#preview").hide()
 			$("#view").attr('disabled',false)
+			$("#sbar").click()
 		});
 		$("#view").click(function(){
 			$("#view").attr('disabled',true)
@@ -298,11 +303,13 @@
 			});
 			$("#input").hide()
 			$("#preview").show()
+			$("#sbar").click()
 		});
 		$("#resetmsg").click(function(){
 			$("#preview").click()
 			$("#input").html("")
 			$("#preview").html("")
+			$("#sbar").click()
 		});
 		$("#sbar").click(function(){
 			$("html, body").animate({
